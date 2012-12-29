@@ -1,3 +1,5 @@
+require_dependency "ragnarok2/application_controller"
+
 module Ragnarok2
   class ItemsController < ApplicationController
 

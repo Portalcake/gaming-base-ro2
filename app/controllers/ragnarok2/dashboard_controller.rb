@@ -1,3 +1,5 @@
+require_dependency "ragnarok2/application_controller"
+
 module Ragnarok2
   class DashboardController < ApplicationController
 
@@ -5,7 +7,7 @@ module Ragnarok2
       respond_to do |format|
         format.html { 
           flash.keep
-          redirect_to localized_root_path
+          redirect_to localized_root_path(:game_locale=>:en)
         }
       end
     end
