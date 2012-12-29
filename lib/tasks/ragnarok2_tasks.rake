@@ -132,7 +132,7 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
-      ["SetItem.ct", ""],
+      #["SetItem.ct", ""],
       ["ProJob_Type.ct", "Ragnarok2::ProJob"],
       ["Map_List.ct", "Ragnarok2::Map"],
       ["Merchant.ct", "Ragnarok2::MerchantInfo"], #before citizen
@@ -143,8 +143,7 @@ namespace :ragnarok2 do
       ["Quest_Info.ct", "Ragnarok2::Quest"]
     ].each do |file, class_name|
 
-      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file), :debug=>true)
-exit
+      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
       mapper = DatabaseMapper.find(
         :header => file.header,
         :class_name => class_name
