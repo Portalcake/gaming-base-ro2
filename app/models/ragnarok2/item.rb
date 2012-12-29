@@ -42,7 +42,7 @@ module Ragnarok2
 
     private 
     def update_category
-        self.category = ItemCategory.unscoped.where(
+        self.category = ItemCategory.where(
             :high_category => self.high_category,
             :medium_category => self.medium_category,
             :low_category => self.low_category,

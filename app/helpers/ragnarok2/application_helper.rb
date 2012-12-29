@@ -5,7 +5,7 @@ module Ragnarok2::ApplicationHelper
       primary.item :cititzens, "NPCs", citizens_path, :highlights_on=>/ro2\/[a-z]{2}\/citizens/
       primary.item :items, "Items", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items/ do |i|
         i.item :items, "All items", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items\/?$/
-        Ragnarok2::ItemCategory.all.each do |item_category|
+        Ragnarok2::ItemCategory.not_empty.all.each do |item_category|
           i.item item_category.category_id,
                   item_category.to_s,
                   url_for(item_category),
