@@ -1,0 +1,17 @@
+.model_details.map
+  %h2= @map
+
+  .box
+    %span.title Details
+    .attributes
+      .attributes= booleanize_string("PK", !@map.is_pk.zero?)
+      .attributes= booleanize_string("Mount", !@map.is_mount.zero?)
+      .attributes= booleanize_string("Skill", !@map.is_skill.zero?)
+      .attributes= booleanize_string("Attack", !@map.is_pk.zero?)
+
+  .box
+    %span.title Quests
+    .quests
+      = render @map.quests
+
+= render "/share/development_box", :model => @map

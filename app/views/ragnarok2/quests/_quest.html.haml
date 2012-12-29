@@ -1,0 +1,19 @@
+%div[quest]{:class=>[:quest, :model_listing, cycle("odd", "even")]}
+  .model_name= link_to quest, quest
+  - if quest.start_citizens.first
+    From #{link_to quest.start_citizens.first, quest.start_citizens.first}
+  at #{link_to quest.map, quest.map}
+  %br
+  Level:
+  = quest.min_base_level
+  \~
+  = quest.max_base_level
+  (#{quest.recommand_base_level} recommended)
+  
+  - unless quest.pc_projob.zero?
+    %br
+    ProJob-Level:
+    = quest.min_projob_level
+    \~
+    = quest.max_projob_level
+    (#{quest.pro_job})

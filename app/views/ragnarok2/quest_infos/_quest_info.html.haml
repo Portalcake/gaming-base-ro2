@@ -1,0 +1,7 @@
+- quest_info.tasks.each do |task|
+  .type Type: #{task[:type]}
+  .map Area: #{link_to task[:map], task[:map]}
+  .target Target: #{link_to task[:target], task[:target]}
+  %br
+
+= render "/share/development_box", :model => quest_info

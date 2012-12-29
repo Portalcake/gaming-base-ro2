@@ -1,0 +1,6 @@
+%div[citizen]{:class=>[:citizen, :model_listing, cycle("odd", "even")]}
+  .model_name
+    = link_to citizen, citizen
+    - if citizen.job_name
+      %br
+      = citizen.job_name

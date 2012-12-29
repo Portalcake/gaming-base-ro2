@@ -1,0 +1,24 @@
+.model_details.citizen
+  %h2= @citizen
+
+  .box
+    %span.title Details
+    .attribute #{@citizen.job_name}
+    .attribute Level #{@citizen.min_level} ~ #{@citizen.max_level}
+
+
+  - unless @citizen.start_quests.empty?
+    .box
+      %span.title Quests
+      - @citizen.start_quests.each do |quest|
+        .quests
+          = link_to quest, quest
+
+  - unless @citizen.items.empty?
+    .box
+      %span.title Sells
+      - @citizen.items.each do |item|
+        .merchant
+          = link_to(item, item)
+
+= render "/share/development_box", :model => @citizen

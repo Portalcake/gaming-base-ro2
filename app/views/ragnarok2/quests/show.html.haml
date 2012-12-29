@@ -1,0 +1,86 @@
+.model_details.quest
+  %h2= @quest
+
+  - if @quest.previous_quest
+    .previous_quest
+      Previous Quest:
+      = link_to @quest.previous_quest, @quest.previous_quest
+  - if @quest.next_quest
+    .next_quest
+      Next Quest:
+      = link_to @quest.next_quest, @quest.next_quest
+
+  .requirements
+    Level:
+    = @quest.min_base_level
+    \~
+    = @quest.max_base_level
+    (#{@quest.recommand_base_level} recommended)
+
+    - unless @quest.pc_projob.zero?
+      %br
+      ProJob-Level:
+      = @quest.min_projob_level
+      \~
+      = @quest.max_projob_level
+      (#{@quest.pro_job})
+
+    - unless @quest.max_khara_point.zero?
+      %br
+      Khara-Points:
+      = @quest.min_khara_point
+      \~
+      = @quest.max_khara_point
+
+  %br
+  .box
+    %span.title Where to find
+    .map
+      Area:
+      = link_to @quest.map, @quest.map
+    - if @quest.start_citizens.first
+      .start_npc
+        Start NPC:
+        = link_to @quest.start_citizens.first, @quest.start_citizens.first
+    - if @quest.end_citizens.first
+      .reward_npc
+        Reward NPC:
+        = link_to @quest.end_citizens.first, @quest.end_citizens.first
+
+  .box
+    %span.title Rewards
+    .rewards
+      .reward #{@quest.reward_exp} EXP
+      - unless @quest.reward_projob_exp.zero?
+        .reward #{@quest.reward_projob_exp} ProJob-EXP
+      - unless @quest.reward_khara_point.zero?
+        .reward #{@quest.reward_khara_point} Khara-Points
+      - @quest.rewards.each do |reward|
+        .reward #{reward.amount} #{link_to reward.item, reward.item}
+      .reward #{@quest.reward_money} Money
+
+  .box
+    %span.title Details
+    .attributes
+      .attributes= booleanize_string("Daily quest", !@quest.daily_quest.zero?)
+      .attributes= booleanize_string("Abondable", !@quest.giveup.zero?)
+      .attributes= booleanize_string("Party quest", !@quest.party.zero?)
+
+  - if @quest.quest_info
+    .box
+      %span.title Tasks
+      .tasks
+        = render @quest.quest_info
+
+  - unless Rails.env.production?
+    .box
+      %span.title Quest texts
+      .quest_texts
+        - [:summary_text, :start_text, :start_demand, :retry_text, :finish_text, :finish_demand].each do |ktext|
+          - text = @quest.translation.send(ktext)
+          - next if text.blank?
+          %div{:class=>ktext}
+            %i #{ktext}:
+            = text
+
+= render "/share/development_box", :model => @quest

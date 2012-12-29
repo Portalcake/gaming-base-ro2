@@ -1,0 +1,42 @@
+.model_details.item
+  %h2= @item
+  .category= @item.category
+  %br
+  - if @item.description
+    .description= @item.description
+
+  .box
+    %span.title Requirements
+    .requirements
+      .requirement Level: #{@item.require_level}
+      .requirement Gender: #{@item.require_sex}
+      .requirement Job: #{@item.require_job}
+
+
+  .box
+    %span.title Details
+    .attribute Price #{@item.price_buy}
+    .attribute #{@item.stack_max} pieces stackable
+    .attribute= booleanize_string("Droppable", @item.is_drop)
+    .attribute= booleanize_string("Depositable", @item.is_deposit)
+    .attribute= booleanize_string("Destructable", @item.is_destruct)
+    .attribute= booleanize_string("Sellable", @item.is_sell)
+    .attribute= booleanize_string("Tradable", @item.is_trade)
+    .attribute= booleanize_string("Composable", @item.is_compose)
+
+  - unless @item.quest_item_rewards.empty?
+    .box
+      %span.title Given as quest rewards
+      - @item.quest_item_rewards.each do |reward|
+        .questreward
+          = link_to(reward.quest, reward.quest)
+          (#{pluralize(reward.amount, "pieces")})
+
+  - unless @item.citizens.empty?
+    .box
+      %span.title Buyable at
+      - @item.citizens.each do |citizen|
+        .merchant
+          = link_to(citizen, citizen)
+
+= render "/share/development_box", :model => @item

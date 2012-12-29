@@ -1,0 +1,22 @@
+- content_for :header do
+  = @game.name
+- title(@game.name)
+
+- content_for :javascripts do
+  = javascript_include_tag "ragnarok2/application"
+- content_for :stylesheets do
+  = stylesheet_link_tag "ragnarok2/application", :media => "all"
+
+- content_for :main_navigation do
+  = render_navigation :level => 1, &ragnarok2_build_page_navigation
+- content_for :sub_navigation do
+  = render_navigation :level => 2, &ragnarok2_build_page_navigation
+
+- content_for :content do
+  = yield
+
+-# if params[:game_locale]
+  -# content_for :left_page_boxes do
+    #game_locale_chooser=# render "ragnarok2/share/game_locale_chooser"
+
+= render :template => 'layouts/application'
