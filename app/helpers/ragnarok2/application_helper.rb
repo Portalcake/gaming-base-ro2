@@ -12,6 +12,7 @@ module Ragnarok2::ApplicationHelper
                   :highlights_on=>Regexp.new("/ro2/[a-z]{2}/item_categories/#{item_category.id}-")
         end
       end
+      primary.item :set_items, "Item Sets", item_sets_path, :highlights_on=>/ro2\/[a-z]{2}\/item_sets/
       primary.item :maps, "Maps", maps_path, :highlights_on=>/ro2\/[a-z]{2}\/maps/
 
     end

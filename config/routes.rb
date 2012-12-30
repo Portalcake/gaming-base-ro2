@@ -5,7 +5,7 @@ Ragnarok2::Engine.routes.draw do
           #:defaults => {:game_locale => "en"},
           :only => [:index, :show] do
 
-          resources :quests, :citizens, :items, :maps
+          resources :quests, :citizens, :items, :maps, :item_sets
           resources :item_categories, :only => :show
 
         end

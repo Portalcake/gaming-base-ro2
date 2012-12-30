@@ -42,6 +42,10 @@ namespace :ragnarok2 do
     m.map_column("String_ID", "job_id")
     m.map_column("String_Job_Name", "translation")
 
+    m = DatabaseMapper.new("Ragnarok2::Translations::ItemSet", :partial=>true, :find_by=>:item_set_id)
+    m.map_column("String_Set_Name", "item_set_id")
+    m.map_column("Name", "translation")
+
     m = DatabaseMapper.new("Ragnarok2::Quest", :partial=>true, :find_by=>:quest_id)
     m.map_column("Errpr_MSG_ID", "Error_MSG_ID") #corrent spelling
 
@@ -84,6 +88,38 @@ namespace :ragnarok2 do
     m.map_column("NPC_Name", nil)
     m.map_column("Item", "item_id")
 
+
+
+    m = DatabaseMapper.new("Ragnarok2::ItemSet", :partial=>false, :find_by=>:set_id) 
+    m.map_column("Set_ID", "set_id")
+    m.map_column("ItemID", "item_1_id")
+    m.map_column("OrItemID", "item_2_id")
+    m.map_column("String_Set_Name", "string_id")
+    m.loader = Proc.new {|entry, ientry|
+
+      itemset = Ragnarok2::ItemSet.where(:set_id=>entry[:set_id]).first_or_initialize
+      itemset.string_id = entry[:string_id]
+
+      #easiest way: delete all and add again:
+      unless $setitems_initialised.include?(entry[:set_id])
+        $setitems_initialised << entry[:set_id]
+        itemset.set_items.destroy_all
+      end
+
+      association = itemset.set_items.build
+      association.main_item = Ragnarok2::Item.where(:item_id=>entry[:item_1_id]).first
+      association.alternative_item = Ragnarok2::Item.where(:item_id=>entry[:item_2_id]).first
+
+      if itemset.save
+        true
+      else
+        itemset.destroy unless itemset.new_record?
+        false
+      end
+    }
+    m.before_load = Proc.new {
+      $setitems_initialised = []
+    }
   end
 
 
@@ -107,6 +143,7 @@ namespace :ragnarok2 do
   task :tbl => [:load_mappers, :environment] do
 
     [
+      ["String_Set_Name.tbl", "Ragnarok2::Translations::ItemSet"],
       ["string_job_name.tbl", "Ragnarok2::Translations::JobName"],
       ["string_item_description.tbl", "Ragnarok2::Translations::ItemDescription"],
       ["string_item_name.tbl", "Ragnarok2::Translations::ItemName"],
@@ -132,15 +169,15 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
-      #["SetItem.ct", ""],
       ["ProJob_Type.ct", "Ragnarok2::ProJob"],
       ["Map_List.ct", "Ragnarok2::Map"],
       ["Merchant.ct", "Ragnarok2::MerchantInfo"], #before citizen
       ["itemcategory.ct", "Ragnarok2::ItemCategory"], #before item
-      ["ItemInfo.ct", "Ragnarok2::Item"], #before quests, citizen
+      ["ItemInfo.ct", "Ragnarok2::Item"], #before quests, citizen, itemset
       ["NPCInfo.ct", "Ragnarok2::Citizen"], #before quests
       ["Quest_Help_Info.ct", "Ragnarok2::QuestInfo"],
-      ["Quest_Info.ct", "Ragnarok2::Quest"]
+      ["Quest_Info.ct", "Ragnarok2::Quest"],
+      ["SetItem.ct", "Ragnarok2::ItemSet"]
     ].each do |file, class_name|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
@@ -159,7 +196,9 @@ class DatabaseMapper
   NO_CHANGE = true
   @@mapper = {}
 
-  def initialize(class_name, opts={})
+  attr_accessor :loader, :before_load, :after_load
+
+  def initialize(class_name, opts={}, &block)
     @model_name = class_name
     @model_instance = class_name.constantize
     @table_header = []
@@ -169,6 +208,7 @@ class DatabaseMapper
       :partial => false,
       :find_by => :id
     }.merge(opts)
+    @loader = block
     @@mapper[class_name] = self
   end
 
@@ -190,25 +230,31 @@ class DatabaseMapper
     raise "Datasets need to be an array" unless Array.try_convert(datasets)
     hashed_datasets = self.map_datasets(datasets)
     ignored = 0
+
+    @before_load.call if @before_load
     hashed_datasets.each_with_index do |entry, ientry|
       #puts "#{entry}\n"
-
-      e = @model_instance.where(@settings[:find_by]=>entry[@settings[:find_by]]).first_or_initialize
-      
-      if !e.update_attributes(entry, :without_protection => true)
-        ignored += 1
-        if settings[:show_invalids]
-          p entry
-          puts
+      unless @loader
+        e = @model_instance.where(@settings[:find_by]=>entry[@settings[:find_by]]).first_or_initialize
+        
+        if !e.update_attributes(entry, :without_protection => true)
+          ignored += 1
+          e.destroy unless e.new_record?
+          if settings[:show_invalids]
+            p entry
+            puts
+          end
+        elsif @settings[:find_by]==:id
+          #cruel workaround to set ID manually
+          @model_instance.update_all("id = #{entry[:id]}", "id = #{e.id}")
         end
-      elsif @settings[:find_by]==:id
-        #cruel workaround to set ID manually
-        @model_instance.update_all("id = #{entry[:id]}", "id = #{e.id}")
+      else
+        ignored += 1 unless @loader.call(entry, ientry)
       end
       print "> Done #{ientry+1}/#{hashed_datasets.count} (#{ignored} invalid)\r"
     end
     puts
-
+    @after_load.call if @after_load
   end
 
   def valid_header?(header)

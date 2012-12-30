@@ -30,6 +30,20 @@ module Ragnarok2
     has_many :citizen_items, :dependent => :destroy
     has_many :citizens, :through => :citizen_items
 
+    has_many :main_set_items,
+            :foreign_key => :item_1_id,
+            :class_name => "Ragnarok2::SetItem",
+            :dependent => :destroy
+
+    has_many :alternative_set_items,
+            :foreign_key => :item_2_id,
+            :class_name => "Ragnarok2::SetItem",
+            :dependent => :nullify
+
+    has_many :main_sets, :through => :main_set_items, :source => :item_set
+    has_many :alternative_sets, :through => :alternative_set_items, :source => :item_set
+
+
     before_validation :update_category
 
     def to_s

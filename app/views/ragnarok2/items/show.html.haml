@@ -39,4 +39,11 @@
         .merchant
           = link_to(citizen, citizen)
 
+  - unless (@item.main_sets+@item.alternative_sets).empty?
+    .box
+      %span.title Part of
+      - (@item.main_sets+@item.alternative_sets).each do |set|
+        .item_set
+          = link_to set, set
+
 = render "/share/development_box", :model => @item
