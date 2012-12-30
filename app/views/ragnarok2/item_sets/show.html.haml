@@ -1,0 +1,14 @@
+.model_details.item_set
+  %h2= @item_set
+
+  .box
+    %span.title Parts
+    .set_items
+      - @item_set.set_items.each do |set_item|
+        .set_item
+          = link_to set_item.main_item, set_item.main_item
+          - if set_item.alternative_item
+            or 
+            = link_to set_item.alternative_item, set_item.alternative_item
+
+= render "/share/development_box", :model => @item_set
