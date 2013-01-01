@@ -3,7 +3,7 @@ namespace :ragnarok2 do
   include Magick
 
   RAGNAROK2_ASSETS_DIR = {
-    :icons => Rails.root.join('public', 'assets', 'games', 'ro2', 'icons')
+    :icons => Rails.root.join('public', 'games', 'ro2', 'icons')
   }
 
   desc "Loads Mappers"
