@@ -19,6 +19,6 @@ module Ragnarok2::ApplicationHelper
   end
 
   def ragnarok2_icon_image_tag(icon, opts={})
-    image_tag("games/ro2/icons/#{icon}.png", :alt=>opts[:alt])
+    image_tag("/games/ro2/icons/#{icon}.png", :alt=>opts[:alt])
   end
 end
