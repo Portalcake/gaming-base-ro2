@@ -1,0 +1,13 @@
+.model_details.item .header {
+  min-height:70px;
+  & h2 {
+    padding-top:7px;
+  }
+}
+
+.model_listing.item {
+  min-height:70px;
+  & .model_name {
+    padding-top:7px;
+  }
+}

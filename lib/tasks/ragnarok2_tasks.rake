@@ -1,4 +1,10 @@
 namespace :ragnarok2 do
+  require 'RMagick'
+  include Magick
+
+  RAGNAROK2_ASSETS_DIR = {
+    :icons => Rails.root.join('public', 'assets', 'games', 'ro2', 'icons')
+  }
 
   desc "Loads Mappers"
   task :load_mappers => :environment do
@@ -179,6 +185,26 @@ namespace :ragnarok2 do
 
       mapper.load(file.data)
     end
+  end
+
+
+  desc "Reads and converts *.dds icons to png"
+  task :dds do
+    puts "Converting *.dds files..."
+    FileUtils.mkdir_p(RAGNAROK2_ASSETS_DIR[:icons]) #create directory if not present
+
+    dds_files = Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'UI', 'UI', 'icon', '**', "*.dds"))
+    dds_files.each_with_index do |dds, index|
+      begin
+        name = File.basename(dds, ".dds")
+        icon = Image.read(dds).first
+        icon.write("#{RAGNAROK2_ASSETS_DIR[:icons]}/#{name.downcase}.png")
+      rescue
+        puts "Ignored #{dds}: #{$!}"
+      end
+      print "> Done #{index+1}/#{dds_files.count}\r"
+    end
+    puts
   end
 end
 
