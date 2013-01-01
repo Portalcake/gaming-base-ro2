@@ -122,8 +122,13 @@ namespace :ragnarok2 do
 
   ############
 
+  desc "Performs a full update (without extraction of game files)"
+  task :update => [:dds, :tbl, :ct] do
+    puts "Update successfully run."
+  end
+
   desc "Performs a full update"
-  task :update => [:vdk, :tbl, :ct] do
+  task :update_with_extract => [:vdk, :dds, :tbl, :ct] do
     puts "Update successfully run."
   end
 
