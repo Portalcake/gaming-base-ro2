@@ -1,14 +1,5 @@
 namespace :ragnarok2 do
 
-  desc "Prints help"
-  task :help do
-    puts "extract : Extract the gameclient vdk files"
-    puts "ct      : Loads *.ct files into database"
-    puts "tbl     : Loads *.tbl files into database"
-    puts "extract : Extract the gameclient vdk files"
-    puts "update  : Performs a full-update of the ro2 database"
-  end
-
   desc "Loads Mappers"
   task :load_mappers => :environment do
 
@@ -131,7 +122,7 @@ namespace :ragnarok2 do
   end
 
   desc "Extracts *.vdk client files"
-  task :extract do
+  task :vdk do
     Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', '*.VDK')) do |src|
       dest = Rails.root.join('share', 'gameclients', 'ro2', 'extracted')
       vdk = VDKUnpacker.new(src, dest)
