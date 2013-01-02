@@ -27,7 +27,7 @@
 
   - unless @item.quest_item_rewards.empty?
     .box
-      %span.title Given as quest rewards
+      %span.title Given as quest reward
       - @item.quest_item_rewards.each do |reward|
         .questreward
           = link_to(reward.quest, reward.quest)

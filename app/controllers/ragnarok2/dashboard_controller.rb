@@ -7,7 +7,7 @@ module Ragnarok2
       respond_to do |format|
         format.html { 
           flash.keep
-          redirect_to localized_root_path(:game_locale=>:en)
+          redirect_to news_index_path
         }
       end
     end
