@@ -5,8 +5,27 @@
     %span.title Details
     .attribute #{@citizen.job_name}
     .attribute Level #{@citizen.min_level} ~ #{@citizen.max_level}
+    .attribute EXP #{@citizen.exp.join(" ~ ")}
+    .attribute Base EXP multiplier #{@citizen.base_exp_multiplier}
+    .attribute Lisence EXP multiplier #{@citizen.lisence_exp_multiplier}
 
+  - unless @citizen.resistances.empty?
+    .box
+      %span.title Element resistance
+      - @citizen.resistances.each do |resistance, value|
+        .resistance
+          #{resistance} #{human_element_resistance(value)}
 
+  .box
+    %span.title Miscellaneous
+    .attribute Attack range #{@citizen.attack_range}
+    .attribute Attack execution time #{@citizen.attack_execution_time}
+    .attribute Attack cooldown #{@citizen.attack_cooldown_time}
+    .attribute Walk speed #{@citizen.walk_speed}
+    .attribute Run speed #{@citizen.run_speed}
+    .attribute Move action time #{@citizen.min_move_action_time} ~ #{@citizen.max_move_action_time}
+    .attribute Corpse disappear time #{@citizen.corpse_disappear_time}
+    
   - unless @citizen.start_quests.empty?
     .box
       %span.title Quests

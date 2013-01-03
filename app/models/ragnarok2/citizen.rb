@@ -34,13 +34,31 @@ module Ragnarok2
     has_many :citizen_items, :dependent => :destroy
     has_many :items, :through => :citizen_items
 
-
     def to_s
       "#{self.name}"
     end
 
     def to_param
       "#{self.id}-#{self.name.to_s.parameterize}"
+    end
+
+    def resistances
+        [
+            [:water, self.water_resist],
+            [:earth, self.earth_resist],
+            [:fire, self.fire_resist],
+            [:wind, self.wind_resist],
+            [:poison, self.poison_resist],
+            [:saint, self.saint_resist],
+            [:dark, self.dark_resist],
+            [:psychokinesis, self.psychokinesis_resist],
+            [:death, self.death_resist],
+        ].delete_if{|k,v| v.zero?}
+    end
+
+    def exp
+        exp = BaseExp.where(:base_level=>[self.min_level, self.max_level])
+        exp.collect{|e| e.npc_base_exp}
     end
 
     private

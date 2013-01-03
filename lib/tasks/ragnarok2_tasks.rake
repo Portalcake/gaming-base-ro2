@@ -85,6 +85,8 @@ namespace :ragnarok2 do
     m.map_column("NPC_Name", nil)
     m.map_column("Item", "item_id")
 
+    m = DatabaseMapper.new("Ragnarok2::BaseExp", :partial=>true, :find_by=>:base_level)
+
 
 
     m = DatabaseMapper.new("Ragnarok2::ItemSet", :partial=>false, :find_by=>:set_id) 
@@ -171,6 +173,7 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
+      ["BaseExpTable.ct", "Ragnarok2::BaseExp"],
       ["ProJob_Type.ct", "Ragnarok2::ProJob"],
       ["Map_List.ct", "Ragnarok2::Map"],
       ["Merchant.ct", "Ragnarok2::MerchantInfo"], #before citizen
@@ -183,6 +186,7 @@ namespace :ragnarok2 do
     ].each do |file, class_name|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
+      
       mapper = DatabaseMapper.find(
         :header => file.header,
         :class_name => class_name
