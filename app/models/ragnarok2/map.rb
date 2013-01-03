@@ -9,6 +9,9 @@ module Ragnarok2
             :primary_key => :map_id,
             :foreign_key => :area_id
 
+    has_many :map_dungeons, :dependent => :destroy
+    has_many :dungeons, :through => :map_dungeons
+
     def to_s
       self.name
     end

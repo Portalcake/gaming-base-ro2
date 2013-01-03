@@ -12,6 +12,11 @@
   .box
     %span.title Quests
     .quests
-      = render @map.quests
+      = (render @map.quests) || "None"
+
+  .box
+    %span.title Dungeons
+    .dungeons
+      = (render @map.dungeons) || "None"
 
 = render "/share/development_box", :model => @map

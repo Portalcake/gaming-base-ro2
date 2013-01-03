@@ -87,7 +87,11 @@ namespace :ragnarok2 do
 
     m = DatabaseMapper.new("Ragnarok2::BaseExp", :partial=>true, :find_by=>:base_level)
 
-
+    m = DatabaseMapper.new("Ragnarok2::Dungeon", :partial=>true, :find_by=>:dungeon_id)
+    m.map_column("DungeonID", "dungeon_id")
+    m.map_column("DungeonGroupID", "dungeon_group_id")
+    m.map_column("DungeonName", "name")
+    m.map_column("Need_Quest_ID", "quest_id")
 
     m = DatabaseMapper.new("Ragnarok2::ItemSet", :partial=>false, :find_by=>:set_id) 
     m.map_column("Set_ID", "set_id")
@@ -175,14 +179,15 @@ namespace :ragnarok2 do
     [
       ["BaseExpTable.ct", "Ragnarok2::BaseExp"],
       ["ProJob_Type.ct", "Ragnarok2::ProJob"],
-      ["Map_List.ct", "Ragnarok2::Map"],
+      ["Map_List.ct", "Ragnarok2::Map"], #before dungeon
       ["Merchant.ct", "Ragnarok2::MerchantInfo"], #before citizen
       ["itemcategory.ct", "Ragnarok2::ItemCategory"], #before item
       ["ItemInfo.ct", "Ragnarok2::Item"], #before quests, citizen, itemset
       ["NPCInfo.ct", "Ragnarok2::Citizen"], #before quests
       ["Quest_Help_Info.ct", "Ragnarok2::QuestInfo"],
       ["Quest_Info.ct", "Ragnarok2::Quest"],
-      ["SetItem.ct", "Ragnarok2::ItemSet"]
+      ["SetItem.ct", "Ragnarok2::ItemSet"],
+      ["DungeonInfo.ct", "Ragnarok2::Dungeon"]
     ].each do |file, class_name|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))

@@ -72,6 +72,8 @@ module Ragnarok2
 
     has_many :quest_item_rewards, :dependent => :destroy
     has_many :items, :through => :quest_item_rewards
+    has_many :dungeons,
+            :primary_key => :quest_id
 
     def quest_title
       self.translation.quest_title
