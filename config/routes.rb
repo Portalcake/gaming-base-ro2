@@ -9,6 +9,8 @@ Ragnarok2::Engine.routes.draw do
           resources :item_categories, :only => :show
 
           resources :news
+
+          match "exp" => "exp#index", :as => :exp_overview
         end
         scope ":game_locale" do
           match "/" => "dashboard#start", :as => :localized_root
