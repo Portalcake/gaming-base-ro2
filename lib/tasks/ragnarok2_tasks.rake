@@ -3,7 +3,8 @@ namespace :ragnarok2 do
   include Magick
 
   RAGNAROK2_ASSETS_DIR = {
-    :icons => Rails.root.join('public', 'games', 'ro2', 'icons')
+    :icons => Rails.root.join('public', 'games', 'ro2', 'icons'),
+    :maps => Rails.root.join('public', 'games', 'ro2', 'maps')
   }
 
   desc "Loads Mappers"
@@ -203,22 +204,45 @@ namespace :ragnarok2 do
 
 
   desc "Reads and converts *.dds icons to png"
-  task :dds do
-    puts "Converting *.dds files..."
-    FileUtils.mkdir_p(RAGNAROK2_ASSETS_DIR[:icons]) #create directory if not present
+  task :dds_icons do
+    puts "Converting *.dds icon files..."
 
     dds_files = Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'UI', 'UI', 'icon', '**', "*.dds"))
     dds_files.each_with_index do |dds, index|
-      begin
-        name = File.basename(dds, ".dds")
-        icon = Image.read(dds).first
-        icon.write("#{RAGNAROK2_ASSETS_DIR[:icons]}/#{name.downcase}.png")
-      rescue
-        puts "Ignored #{dds}: #{$!}"
-      end
+      dds_to_png(dds, RAGNAROK2_ASSETS_DIR[:icons])
       print "> Done #{index+1}/#{dds_files.count}\r"
     end
     puts
+  end
+
+
+  desc "Reads and converts *.dds maps to png"
+  task :dds_maps do
+    puts "Converting *.dds map files..."
+
+    dds_files = Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'UI', 'LANG', '65', 'map', "*.dds"))
+    dds_files.each_with_index do |dds, index|
+      dds_to_png(dds, RAGNAROK2_ASSETS_DIR[:maps])
+      print "> Done #{index+1}/#{dds_files.count}\r"
+    end
+  end
+
+  desc "Reads and converts all *.dss files"
+  task :dds => [:dds_icons, :dds_maps] do
+  end
+end
+
+
+def dds_to_png(src, dest)
+  FileUtils.mkdir_p(dest) #create directory if not present
+  begin
+    name = File.basename(src, ".dds")
+    icon = Image.read(src).first
+    icon.write("#{dest}/#{name.downcase}.png")
+    true
+  rescue
+    puts "Ignored #{src}: #{$!}"
+    false
   end
 end
 

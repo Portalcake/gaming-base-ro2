@@ -1,0 +1,18 @@
+.model_details.map {
+  .minimap {
+    height:200px;
+    float:right;
+    img {
+      max-width: 200px;
+      max-height: 200px;
+    }
+  }
+  .box {
+    &.quests {
+      clear:right;
+    }
+    &.details {
+      margin-right:200px;
+    }
+  }
+}

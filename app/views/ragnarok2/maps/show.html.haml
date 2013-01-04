@@ -1,7 +1,8 @@
 .model_details.map
+  .minimap= ragnarok2_minimap_image_tag(@map)
   %h2= @map
 
-  .box
+  .box.details
     %span.title Details
     .attributes
       .attributes= booleanize_string("PK", !@map.is_pk.zero?)
@@ -9,7 +10,7 @@
       .attributes= booleanize_string("Skill", !@map.is_skill.zero?)
       .attributes= booleanize_string("Attack", !@map.is_pk.zero?)
 
-  .box
+  .box.quests
     %span.title Quests
     .quests
       = (render @map.quests) || "None"
