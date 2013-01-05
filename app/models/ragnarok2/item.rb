@@ -43,6 +43,10 @@ module Ragnarok2
     has_many :main_sets, :through => :main_set_items, :source => :item_set
     has_many :alternative_sets, :through => :alternative_set_items, :source => :item_set
 
+    has_many :traits,
+            :foreign_key => :item_id,
+            :primary_key => :item_id
+
 
     before_validation :update_category
     before_validation {

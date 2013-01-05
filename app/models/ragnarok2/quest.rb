@@ -104,15 +104,14 @@ module Ragnarok2
         end
     end
 
-    def update_rewards
+    def update_rewards(force=false)
       #only rebuild if any rewards have been changed
-      return unless columns_changed?(@@rewards_columns)
-      self.rewards.clear
+      return unless columns_changed?(@@rewards_columns) || force
+      self.rewards.destroy_all
       @@rewards_columns.each do |column_item_id, column_amount_id|
-        if self[column_item_id] && !self[column_item_id].zero?
-          item = Item.where(:item_id=>self[column_item_id]).first
-          self.rewards.create(:item => item, :amount => self[column_amount_id]) if self[column_amount_id]
-        end
+        next unless self[column_item_id] && !self[column_item_id].zero?
+        item = Item.where(:item_id=>self[column_item_id]).first
+        self.rewards.create(:item => item, :amount => self[column_amount_id]) if self[column_amount_id]
       end
     end
 

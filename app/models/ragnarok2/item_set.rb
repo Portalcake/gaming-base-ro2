@@ -15,6 +15,12 @@ module Ragnarok2
 
     has_many :set_items, :dependent => :destroy
 
+    has_many :set_traits,
+            :foreign_key => :set_id,
+            :primary_key => :set_id
+
+    alias_method :traits, :set_traits
+
     def to_s
       "#{self.name}"
     end

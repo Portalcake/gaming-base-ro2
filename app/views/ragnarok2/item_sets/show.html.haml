@@ -11,4 +11,12 @@
             or 
             = link_to set_item.alternative_item, set_item.alternative_item
 
+  .box
+    %span.title Properties
+    .properties
+      - if @item_set.traits.empty?
+        None
+      - @item_set.traits.each do |trait|
+        .property= render trait
+        
 = render "/share/development_box", :model => @item_set

@@ -13,11 +13,19 @@
       .requirement Gender: #{@item.require_sex}
       .requirement Job: #{@item.require_job}
 
+  .box
+    %span.title Properties
+    .properties
+      - if @item.traits.empty?
+        None
+      - @item.traits.each do |trait|
+        .property= render trait
 
   .box
     %span.title Details
     .attribute Price #{@item.price_buy}
     .attribute #{@item.stack_max} pieces stackable
+    .attribute Durability #{human_item_durability(@item.durability)}
     .attribute= booleanize_string("Droppable", @item.is_drop)
     .attribute= booleanize_string("Depositable", @item.is_deposit)
     .attribute= booleanize_string("Destructable", @item.is_destruct)

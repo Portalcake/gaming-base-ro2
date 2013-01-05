@@ -44,6 +44,10 @@ namespace :ragnarok2 do
     m.map_column("String_Set_Name", "item_set_id")
     m.map_column("Name", "translation")
 
+    m = DatabaseMapper.new("Ragnarok2::Translations::TraitName", :partial=>true, :find_by=>:trait_id)
+    m.map_column("MessageID", "trait_id")
+    m.map_column("Message", "translation")
+
     m = DatabaseMapper.new("Ragnarok2::Quest", :partial=>true, :find_by=>:quest_id)
     m.map_column("Errpr_MSG_ID", "Error_MSG_ID") #corrent spelling
 
@@ -124,6 +128,16 @@ namespace :ragnarok2 do
     m.before_load = Proc.new {
       $setitems_initialised = []
     }
+
+    m = DatabaseMapper.new("Ragnarok2::Trait", :partial=>true)
+    m.map_column("ItemID", "item_id")
+    m.map_column("Value", "trait_value1")
+    m.map_column("Value2", "trait_value2")
+
+    m = DatabaseMapper.new("Ragnarok2::SetTrait", :partial=>true, :truncate=>true)
+    m.map_column("Set_ID", "set_id")
+    m.map_column("Value", "trait_value")
+    m.map_column("Count", "amount")
   end
 
 
@@ -152,6 +166,7 @@ namespace :ragnarok2 do
   task :tbl => [:load_mappers, :environment] do
 
     [
+      ["String_TraitName.tbl", "Ragnarok2::Translations::TraitName"],
       ["String_Set_Name.tbl", "Ragnarok2::Translations::ItemSet"],
       ["string_job_name.tbl", "Ragnarok2::Translations::JobName"],
       ["string_item_description.tbl", "Ragnarok2::Translations::ItemDescription"],
@@ -178,6 +193,10 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
+      ["JobInfo.ct", "Ragnarok2::SetTrait"],
+      ["SetTrait.ct", "Ragnarok2::SetTrait"], #before itemset
+      ["TraitInfo.ct", "Ragnarok2::Trait", :truncate=>true], #before items, before trait-part1
+      ["TraitInfo2.ct", "Ragnarok2::Trait"], #before items
       ["BaseExpTable.ct", "Ragnarok2::BaseExp"],
       ["ProJob_Type.ct", "Ragnarok2::ProJob"],
       ["Map_List.ct", "Ragnarok2::Map"], #before dungeon
@@ -189,19 +208,36 @@ namespace :ragnarok2 do
       ["Quest_Info.ct", "Ragnarok2::Quest"],
       ["SetItem.ct", "Ragnarok2::ItemSet"],
       ["DungeonInfo.ct", "Ragnarok2::Dungeon"]
-    ].each do |file, class_name|
+    ].each do |file, class_name, opts|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
-      
+
       mapper = DatabaseMapper.find(
         :header => file.header,
         :class_name => class_name
       )
 
-      mapper.load(file.data)
+      mapper.load(file.data, opts)
     end
   end
 
+  desc "Search through ct files to find a value"
+  task :search_ct => [:environment] do
+    #search_value = "45"
+    #Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', "*.ct")).sort.each do |file|
+
+    #  ext = FileExtractor_ct.new(file)
+    #  puts file if ext.data.flatten.collect{|v| v.to_s}.include?(search_value)
+    #end
+    
+    Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', '**', "*.ct")).each do |file|
+      begin
+        file = FileExtractor_ct.new(file, :debug=>true)
+      rescue
+        puts "ERROR: #{file}: #{$!}"
+      end
+    end
+  end
 
   desc "Reads and converts *.dds icons to png"
   task :dds_icons do
@@ -261,7 +297,7 @@ class DatabaseMapper
       #if set, only columns which should be handles specific need to be specified.
       #other columns will be added automatically with NO_CHANGE
       :partial => false,
-      :find_by => :id
+      :show_invalids => false
     }.merge(opts)
     @loader = block
     @@mapper[class_name] = self
@@ -279,18 +315,23 @@ class DatabaseMapper
   end
 
   def load(datasets, opts={})
-    settings = {:show_invalids => false}.merge(opts)
+    settings = @settings.merge(opts || {})
 
     puts "#{@model_name}"
     raise "Datasets need to be an array" unless Array.try_convert(datasets)
     hashed_datasets = self.map_datasets(datasets)
     ignored = 0
 
+    @model_instance.destroy_all if settings[:truncate]
     @before_load.call if @before_load
     hashed_datasets.each_with_index do |entry, ientry|
       #puts "#{entry}\n"
       unless @loader
-        e = @model_instance.where(@settings[:find_by]=>entry[@settings[:find_by]]).first_or_initialize
+        if !settings[:find_by]
+          e = @model_instance.create
+        else 
+          e = @model_instance.where(settings[:find_by]=>entry[settings[:find_by]]).first_or_initialize
+        end
         
         if !e.update_attributes(entry, :without_protection => true)
           ignored += 1
@@ -299,7 +340,7 @@ class DatabaseMapper
             p entry
             puts
           end
-        elsif @settings[:find_by]==:id
+        elsif settings[:find_by]==:id
           #cruel workaround to set ID manually
           @model_instance.update_all("id = #{entry[:id]}", "id = #{e.id}")
         end

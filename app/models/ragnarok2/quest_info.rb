@@ -17,7 +17,8 @@ module Ragnarok2
         tasks << {
           :type=>self["complete_target_#{i}"],
           :target => Citizen.where(:citizen_id=>self["target_id_#{i}"]).first,
-          :map => Map.where(:map_id=>self["area_id_#{i}"]).first
+          :map => Map.where(:map_id=>self["area_id_#{i}"]).first,
+          :position => [self["target_x_#{i}"], self["target_y_#{i}"]]
         }
       end
       tasks
