@@ -193,7 +193,7 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
-      ["JobInfo.ct", "Ragnarok2::SetTrait"],
+      #["JobInfo.ct", ""],
       ["SetTrait.ct", "Ragnarok2::SetTrait"], #before itemset
       ["TraitInfo.ct", "Ragnarok2::Trait", :truncate=>true], #before items, before trait-part1
       ["TraitInfo2.ct", "Ragnarok2::Trait"], #before items
