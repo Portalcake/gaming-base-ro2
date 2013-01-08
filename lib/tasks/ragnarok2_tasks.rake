@@ -134,7 +134,7 @@ namespace :ragnarok2 do
     m.map_column("Value", "trait_value1")
     m.map_column("Value2", "trait_value2")
 
-    m = DatabaseMapper.new("Ragnarok2::SetTrait", :partial=>true, :truncate=>true)
+    m = DatabaseMapper.new("Ragnarok2::SetTrait", :partial=>true, :delete_all=>true)
     m.map_column("Set_ID", "set_id")
     m.map_column("Value", "trait_value")
     m.map_column("Count", "amount")
@@ -195,7 +195,7 @@ namespace :ragnarok2 do
     [
       #["JobInfo.ct", ""],
       ["SetTrait.ct", "Ragnarok2::SetTrait"], #before itemset
-      ["TraitInfo.ct", "Ragnarok2::Trait", :truncate=>true], #before items, before trait-part1
+      ["TraitInfo.ct", "Ragnarok2::Trait", :delete_all=>true], #before items, before trait-part1
       ["TraitInfo2.ct", "Ragnarok2::Trait"], #before items
       ["BaseExpTable.ct", "Ragnarok2::BaseExp"],
       ["ProJob_Type.ct", "Ragnarok2::ProJob"],
@@ -322,7 +322,7 @@ class DatabaseMapper
     hashed_datasets = self.map_datasets(datasets)
     ignored = 0
 
-    @model_instance.destroy_all if settings[:truncate]
+    @model_instance.delete_all if settings[:delete_all]
     @before_load.call if @before_load
     hashed_datasets.each_with_index do |entry, ientry|
       #puts "#{entry}\n"
