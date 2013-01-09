@@ -5,7 +5,10 @@ module Ragnarok2
 
 
     def index
-      respond_with(@news = ::News.published.where(:game_id=>@game.id).page(params[:page]), :template=>"/news/index")
+      @news = {}
+      @news[:games] = ::News.published.where(:game_id=>@game.id).page(params[:page])
+      @news[:gaming_base] = ::News.published.where(:game_id=>nil).limit(7)
+      respond_with(@news, :template=>"/news/index")
     end
 
     def show
