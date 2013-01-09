@@ -55,11 +55,7 @@ module Ragnarok2
 
 
     before_validation :update_category
-    before_validation {
-        name = icon.scan(/[^\\\/]+\.dds/).first
-        name = name.gsub(".dds", "").downcase if name
-        self.icon = name
-    }
+    before_save :update_icon_name
 
     def to_s
       "#{self.name}"
@@ -76,6 +72,13 @@ module Ragnarok2
             :medium_category => self.medium_category,
             :low_category => self.low_category,
         ).first
+    end
+
+    def update_icon_name
+        return unless self.icon_changed?
+        name = self.icon.scan(/[^\\\/]+\.dds/).first
+        name = name.gsub(".dds", "").downcase if name
+        self.icon = name
     end
   end
 end
