@@ -12,6 +12,7 @@ module Ragnarok2
     has_many :map_dungeons, :dependent => :destroy
     has_many :dungeons, :through => :map_dungeons
 
+    scope :default_order, order("ragnarok2_maps.name ASC")
     def to_s
       self.name
     end

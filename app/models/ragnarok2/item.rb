@@ -40,13 +40,16 @@ module Ragnarok2
             :class_name => "Ragnarok2::SetItem",
             :dependent => :nullify
 
-    has_many :main_sets, :through => :main_set_items, :source => :item_set
-    has_many :alternative_sets, :through => :alternative_set_items, :source => :item_set
+    has_many :main_sets,
+            :through => :main_set_items,
+            :source => :item_set
+    has_many :alternative_sets,
+            :through => :alternative_set_items,
+            :source => :item_set
 
     has_many :traits,
             :foreign_key => :item_id,
             :primary_key => :item_id
-
 
     has_many :item_break_results,
             :primary_key => :item_break_result_id,
@@ -56,6 +59,8 @@ module Ragnarok2
 
     before_validation :update_category
     before_save :update_icon_name
+
+    scope :default_order, order("ragnarok2_items.require_level ASC, ragnarok2_translations_item_names.translation ASC")
 
     def to_s
       "#{self.name}"

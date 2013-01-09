@@ -13,7 +13,7 @@ module Ragnarok2
             :foreign_key => :string_name_id,
             :primary_key => :citizen_id,
             :class_name => "Ragnarok2::Translations::CitizenName"
-    #default_scope :order => "ragnarok2_translations_citizen_names.translation ASC"
+
     default_scope includes(:job_name)
     belongs_to :job_name,
             :foreign_key => :string_job_name_id,
@@ -33,6 +33,8 @@ module Ragnarok2
 
     has_many :citizen_items, :dependent => :destroy
     has_many :items, :through => :citizen_items
+
+    scope :default_order, order("ragnarok2_translations_citizen_names.translation ASC")
 
     def to_s
       "#{self.name}"

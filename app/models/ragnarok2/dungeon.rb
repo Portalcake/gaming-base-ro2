@@ -9,6 +9,8 @@ module Ragnarok2
     has_many :maps, :through => :map_dungeons
     belongs_to :quest
 
+    scope :default_order, order("ragnarok2_dungeons.name ASC, ragnarok2_dungeons.map_level ASC")
+
     after_save :update_maps
 
     def to_s

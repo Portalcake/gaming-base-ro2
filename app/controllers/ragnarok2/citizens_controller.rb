@@ -5,9 +5,9 @@ module Ragnarok2
 
     def index
       if params[:q].nil? || params[:q].length.zero?
-        @citizens = Citizen.page(params[:page])
+        @citizens = Citizen.default_order.page(params[:page])
       else
-        @citizens = Citizen.where("ragnarok2_translations_citizen_names.translation LIKE ?", "%#{params[:q]}%").page(params[:page])
+        @citizens = Citizen.default_order.where("ragnarok2_translations_citizen_names.translation LIKE ?", "%#{params[:q]}%").page(params[:page])
       end
       respond_with(@citizens)
     end

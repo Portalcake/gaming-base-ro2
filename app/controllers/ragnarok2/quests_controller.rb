@@ -5,9 +5,9 @@ module Ragnarok2
 
     def index
       if params[:q].nil? || params[:q].length.zero?
-        @quests = Quest.page(params[:page])
+        @quests = Quest.default_order.page(params[:page])
       else
-        @quests = Quest.where("ragnarok2_translations_quests.quest_title LIKE ?", "%#{params[:q]}%").page(params[:page])
+        @quests = Quest.default_order.where("ragnarok2_translations_quests.quest_title LIKE ?", "%#{params[:q]}%").page(params[:page])
       end
       respond_with(@quests)
     end

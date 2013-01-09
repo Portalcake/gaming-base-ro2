@@ -4,9 +4,9 @@ module Ragnarok2
   class ItemSetsController < ApplicationController
     def index
       if params[:q].nil? || params[:q].length.zero?
-        @item_sets = ItemSet.page(params[:page])
+        @item_sets = ItemSet.default_order.page(params[:page])
       else
-        @item_sets = ItemSet.where("ragnarok2_translations_item_sets.translation LIKE ?", "%#{params[:q]}%").page(params[:page])
+        @item_sets = ItemSet.default_order.where("ragnarok2_translations_item_sets.translation LIKE ?", "%#{params[:q]}%").page(params[:page])
       end
       respond_with(@item_sets)
     end

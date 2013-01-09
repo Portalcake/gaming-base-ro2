@@ -10,7 +10,7 @@ module Ragnarok2
         item_models = Item.where("ragnarok2_translations_item_names.translation LIKE ?", "%#{params[:q]}%")
       end
 
-      respond_with(@items = item_models.where(:category_id=>params[:id]).page(params[:page]))
+      respond_with(@items = item_models.default_order.where(:category_id=>params[:id]).page(params[:page]))
     end
 
   end

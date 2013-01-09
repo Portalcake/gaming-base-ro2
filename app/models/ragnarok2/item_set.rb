@@ -19,6 +19,8 @@ module Ragnarok2
             :foreign_key => :set_id,
             :primary_key => :set_id
 
+    scope :default_order, order("ragnarok2_translations_item_sets.translation ASC")
+
     alias_method :traits, :set_traits
 
     def to_s

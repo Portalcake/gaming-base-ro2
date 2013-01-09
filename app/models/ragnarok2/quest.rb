@@ -26,7 +26,7 @@ module Ragnarok2
 
     default_scope includes(:translation)
     default_scope includes(:quest_citizens, :citizens)
-    default_scope :order => "min_base_level ASC, recommand_base_level ASC"
+    scope :default_order, order("ragnarok2_quests.min_base_level ASC, ragnarok2_quests.recommand_base_level ASC")
 
     belongs_to :translation,
             :primary_key => :quest_id,

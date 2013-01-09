@@ -12,3 +12,5 @@
       - if @dungeon.quest
         .detail Required quest: #{link_to @dungeon.quest, @dungeon.quest}
       .detail Basement: #{@dungeon.map_level}
+
+= render "/share/development_box", :model => @dungeon

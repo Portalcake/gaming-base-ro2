@@ -13,7 +13,7 @@
   .box.quests
     %span.title Quests
     .quests
-      = (render @map.quests) || "None"
+      = (render @map.quests.default_order) || "None"
 
   .box
     %span.title Dungeons

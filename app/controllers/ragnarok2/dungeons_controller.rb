@@ -5,9 +5,9 @@ module Ragnarok2
 
     def index
       if params[:q].nil? || params[:q].length.zero?
-        @dungeons = Dungeon.page(params[:page])
+        @dungeons = Dungeon.default_order.page(params[:page])
       else
-        @dungeons = Dungeon.where("ragnarok2_dungeons.name LIKE ?", "%#{params[:q]}%").page(params[:page])
+        @dungeons = Dungeon.default_order.where("ragnarok2_dungeons.name LIKE ?", "%#{params[:q]}%").page(params[:page])
       end
       respond_with(@dungeons)
     end

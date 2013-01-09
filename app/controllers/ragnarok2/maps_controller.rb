@@ -5,9 +5,9 @@ module Ragnarok2
 
     def index
       if params[:q].nil? || params[:q].length.zero?
-        @maps = Map.page(params[:page])
+        @maps = Map.default_order.page(params[:page])
       else
-        @maps = Map.where("ragnarok2_maps.name LIKE ?", "%#{params[:q]}%").page(params[:page])
+        @maps = Map.default_order.where("ragnarok2_maps.name LIKE ?", "%#{params[:q]}%").page(params[:page])
       end
       respond_with(@maps)
     end
