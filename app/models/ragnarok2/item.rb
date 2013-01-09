@@ -48,6 +48,12 @@ module Ragnarok2
             :primary_key => :item_id
 
 
+    has_many :item_break_results,
+            :primary_key => :item_break_result_id,
+            :foreign_key => :result_id,
+            :order => 'grade ASC'
+
+
     before_validation :update_category
     before_validation {
         name = icon.scan(/[^\\\/]+\.dds/).first

@@ -58,4 +58,11 @@
         .item_set
           = link_to set, set
 
+  - unless @item.item_break_results.empty?
+    .box
+      %span.title Breaks into the following
+      - @item.item_break_results.each do |break_result|
+        .break_result
+          = render break_result
+
 = render "/share/development_box", :model => @item

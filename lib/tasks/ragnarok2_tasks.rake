@@ -138,6 +138,38 @@ namespace :ragnarok2 do
     m.map_column("Set_ID", "set_id")
     m.map_column("Value", "trait_value")
     m.map_column("Count", "amount")
+
+
+    m = DatabaseMapper.new("Ragnarok2::ItemBreakInfo", :partial=>false)
+    m.map_column("Item_ID", "item_id")
+    m.map_column("StringNameID", nil)
+    m.map_column("BreakResultID", "item_break_result_id")
+    m.loader = Proc.new { |entry, ientry|
+      if item = Ragnarok2::Item.where(:item_id=>entry[:item_id]).first
+        item.item_break_result_id = entry[:item_break_result_id]
+        item.save
+      else
+        false
+      end
+    }
+    m.before_load = Proc.new {
+      Ragnarok2::Item.update_all(:item_break_result_id=>nil)
+    }
+
+    m = DatabaseMapper.new("Ragnarok2::ItemBreakResult", :partial=>false, :delete_all=>true)
+    m.map_column("Result_ID", "result_id")
+    m.map_column("BreakGradeNum", "grade")
+    m.map_column("BreakNeedItemID", "needed_item_id")
+    m.map_column("BreakNeedItemNameID", nil)
+    m.map_column("BreakNeedItemNum", "needed_item_amount")
+    m.map_column("BreakResultItemID1", "result_item_1_id")
+    m.map_column("BreakResultItemNameID1", nil)
+    m.map_column("BreakResultItemNum1", "result_item_1_amount")
+    m.map_column("BreakResultRate1", "result_item_1_rate")
+    m.map_column("BreakResultItemID2", "result_item_2_id")
+    m.map_column("BreakResultItemNameID2", nil)
+    m.map_column("BreakResultItemNum2", "result_item_2_amount")
+    m.map_column("BreakResultRate2", "result_item_2_rate")
   end
 
 
@@ -193,7 +225,6 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
-      #["JobInfo.ct", ""],
       ["SetTrait.ct", "Ragnarok2::SetTrait"], #before itemset
       ["TraitInfo.ct", "Ragnarok2::Trait", :delete_all=>true], #before items, before trait-part1
       ["TraitInfo2.ct", "Ragnarok2::Trait"], #before items
@@ -202,12 +233,14 @@ namespace :ragnarok2 do
       ["Map_List.ct", "Ragnarok2::Map"], #before dungeon
       ["Merchant.ct", "Ragnarok2::MerchantInfo"], #before citizen
       ["itemcategory.ct", "Ragnarok2::ItemCategory"], #before item
-      ["ItemInfo.ct", "Ragnarok2::Item"], #before quests, citizen, itemset
+      ["ItemInfo.ct", "Ragnarok2::Item"], #before quests, citizen, itemset, itembreakinfo, breakresult
       ["NPCInfo.ct", "Ragnarok2::Citizen"], #before quests
       ["Quest_Help_Info.ct", "Ragnarok2::QuestInfo"],
       ["Quest_Info.ct", "Ragnarok2::Quest"],
       ["SetItem.ct", "Ragnarok2::ItemSet"],
-      ["DungeonInfo.ct", "Ragnarok2::Dungeon"]
+      ["DungeonInfo.ct", "Ragnarok2::Dungeon"],
+      ["ItemBreakInfo.ct", "Ragnarok2::ItemBreakInfo"],
+      ["BreakResult.ct", "Ragnarok2::ItemBreakResult"]
     ].each do |file, class_name, opts|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
@@ -291,7 +324,11 @@ class DatabaseMapper
 
   def initialize(class_name, opts={}, &block)
     @model_name = class_name
-    @model_instance = class_name.constantize
+    begin 
+      @model_instance = class_name.constantize
+    rescue
+      @model_instance = nil
+    end
     @table_header = []
     @settings = {
       #if set, only columns which should be handles specific need to be specified.
@@ -322,7 +359,7 @@ class DatabaseMapper
     hashed_datasets = self.map_datasets(datasets)
     ignored = 0
 
-    @model_instance.delete_all if settings[:delete_all]
+    @model_instance.delete_all if settings[:delete_all] && @model_instance
     @before_load.call if @before_load
     hashed_datasets.each_with_index do |entry, ientry|
       #puts "#{entry}\n"

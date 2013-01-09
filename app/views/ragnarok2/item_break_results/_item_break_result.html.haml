@@ -1,0 +1,12 @@
+.item_break_result[item_break_result]
+  Grade #{item_break_result.grade.to_s.rjust(2, "0")}:
+  .helper
+    Helper-Item:
+    = link_to item_break_result.helper_item, item_break_result.helper_item
+    (#{item_break_result.needed_item_amount}x)
+  .results
+  - item_break_result.results.each do |result|
+    .result
+      = link_to result[:item], result[:item]
+      (#{ragnarok2_human_percent(result[:rate])}, #{result[:amount]}x)
+

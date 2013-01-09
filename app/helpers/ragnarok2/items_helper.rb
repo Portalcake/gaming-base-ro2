@@ -1,6 +1,7 @@
 module Ragnarok2
   module ItemsHelper
     def human_item_durability(value)
+      return "-" if value.zero?
       number_to_percentage(value.to_f/100, :precision=>2)
     end
 
@@ -13,7 +14,7 @@ module Ragnarok2
       when 1
         "male"
       else
-        "-"
+        content_tag(:i, "unknown")
       end
     end
   end

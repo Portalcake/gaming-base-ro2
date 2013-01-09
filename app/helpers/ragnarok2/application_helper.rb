@@ -24,4 +24,8 @@ module Ragnarok2::ApplicationHelper
   def ragnarok2_icon_image_tag(icon, opts={})
     image_tag("/games/ro2/icons/#{icon}.png", opts)
   end
+
+  def ragnarok2_human_percent(value)
+    number_to_percentage(value.to_f/100, :precision=>2)
+  end
 end
