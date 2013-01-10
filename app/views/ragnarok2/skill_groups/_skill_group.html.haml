@@ -1,0 +1,6 @@
+%div[skill_group]{:class=>[:skill, :model_listing, cycle("odd", "even")]}
+  .model_icon= ragnarok2_icon_image_tag(skill_group.skill_icon, :alt=>"")
+  .model_name= link_to skill_group.name_fallback, skill_group
+  .level_amount= pluralize skill_group.skills.count, "Level"
+  - if skill_group.skills.first.description
+    .description= skill_group.skills.first.description

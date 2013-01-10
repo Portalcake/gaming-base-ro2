@@ -1,0 +1,13 @@
+.model_details.skill .header {
+  min-height:70px;
+  & h2 {
+    padding-top:7px;
+  }
+}
+
+.model_listing.skill {
+  min-height:70px;
+  & .model_name {
+    padding-top:7px;
+  }
+}

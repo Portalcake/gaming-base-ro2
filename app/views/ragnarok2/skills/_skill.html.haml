@@ -1,0 +1,12 @@
+.skill[skill]
+  .box
+    %span.title.name= "#{skill.name} (Level #{skill.skill_level})"
+    .requirements
+      .requirement SP: #{skill.use_sp}, HP: #{skill.use_hp}
+      .requirement Casting Time #{[skill.casting_time, skill.minimum_casting_time].sort.join(" ~ ")}
+      .requirement Execution time #{skill.excution_time}
+      .requirement Cooldown time #{skill.cooldown_time}
+      .requirement Effect duration #{skill.effect_duration}
+      .requirement Tick interval #{skill.tick_interval}
+
+= render "/share/development_box", :model => skill

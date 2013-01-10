@@ -16,6 +16,11 @@ module Ragnarok2::ApplicationHelper
       primary.item :set_items, "Item Sets", item_sets_path, :highlights_on=>/ro2\/[a-z]{2}\/item_sets/
       primary.item :maps, "Maps", maps_path, :highlights_on=>/ro2\/[a-z]{2}\/maps/
       primary.item :dungeons, "Dungeons", dungeons_path, :highlights_on=>/ro2\/[a-z]{2}\/dungeons/
+      primary.item :skills, "Skills", skill_groups_path(:learnable=>true), :highlights_on=>/ro2\/[a-z]{2}\/skills/ do |skill_group|
+        skill_group.item :skills_learnable, "All skills", skill_groups_path, :highlights_on=>/ro2\/[a-z]{2}\/skills\/?$/
+        skill_group.item :skills_learnable, "Learnable skills", skill_groups_path(:learnable=>1)
+        skill_group.item :skills_learnable, "Monster skills", skill_groups_path(:learnable=>0)
+      end
       primary.item :exp_overview, "EXP Table", exp_overview_path
 
     end

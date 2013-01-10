@@ -1,0 +1,25 @@
+.model_details.skill
+  .header
+    .model_icon= ragnarok2_icon_image_tag(@skillgroup.skill_icon, :alt=>"")
+    %h2= @skillgroup
+    - if @skillgroup.skills.first.description
+      .description= @skillgroup.skills.first.description
+
+  .box
+    %span.title General properties
+    .properties
+      - unless @skillgroup.required_skills.empty?
+        - @skillgroup.required_skills.each do |s|
+          .property Requires: #{link_to s.skill_group, s.skill_group}
+      .property Max Level #{@skillgroup.max_level}
+      .property Skill range #{[@skillgroup.skill_min_range, @skillgroup.skill_range].sort.join(" ~ ")}
+      .property Attack time #{@skillgroup.attack_time}
+      .property= booleanize_string("Learnable", !@skillgroup.check_learn_skill.zero?)
+      .property= booleanize_string("Usable on jumping", @skillgroup.is_jump_use)
+      .property= booleanize_string("Usable on moving", @skillgroup.is_movable)
+      .property= booleanize_string("Movement stops on usage", @skillgroup.is_move_stop)
+
+  .skills
+    = render @skillgroup.skills
+
+= render "/share/development_box", :model => @skillgroup

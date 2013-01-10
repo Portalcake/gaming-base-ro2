@@ -48,6 +48,14 @@ namespace :ragnarok2 do
     m.map_column("MessageID", "trait_id")
     m.map_column("Message", "translation")
 
+    m = DatabaseMapper.new("Ragnarok2::Translations::SkillName", :partial=>true, :find_by=>:skill_id)
+    m.map_column("String_ID", "skill_id")
+    m.map_column("Skill_Name", "translation")
+
+    m = DatabaseMapper.new("Ragnarok2::Translations::SkillDescription", :partial=>true, :find_by=>:skill_id)
+    m.map_column("String_ID", "skill_id")
+    m.map_column("Skill_Description", "translation")
+
     m = DatabaseMapper.new("Ragnarok2::Quest", :partial=>true, :find_by=>:quest_id)
     m.map_column("Errpr_MSG_ID", "Error_MSG_ID") #corrent spelling
 
@@ -170,6 +178,14 @@ namespace :ragnarok2 do
     m.map_column("BreakResultItemNameID2", nil)
     m.map_column("BreakResultItemNum2", "result_item_2_amount")
     m.map_column("BreakResultRate2", "result_item_2_rate")
+
+    m = DatabaseMapper.new("Ragnarok2::SkillGroup", :partial=>true, :find_by=>:skill_group)
+    m.map_column("Name", "name_fallback")
+
+    m = DatabaseMapper.new("Ragnarok2::Skill", :partial=>true, :find_by=>:skill_id)
+    m.map_column("ID", "skill_id")
+    m.map_column("Name", "name_fallback")
+    m.map_column("Skill_Group", "skill_group_id")
   end
 
 
@@ -198,6 +214,8 @@ namespace :ragnarok2 do
   task :tbl => [:load_mappers, :environment] do
 
     [
+      ["String_Skill_Name.tbl", "Ragnarok2::Translations::SkillName"],
+      ["String_Skill_Description.tbl", "Ragnarok2::Translations::SkillDescription"],
       ["String_TraitName.tbl", "Ragnarok2::Translations::TraitName"],
       ["String_Set_Name.tbl", "Ragnarok2::Translations::ItemSet"],
       ["string_job_name.tbl", "Ragnarok2::Translations::JobName"],
@@ -225,6 +243,8 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
+      ["Skill_Table_SkillLevel.ct", "Ragnarok2::Skill"],
+      ["Skill_Table_Base.ct", "Ragnarok2::SkillGroup"],
       ["SetTrait.ct", "Ragnarok2::SetTrait"], #before itemset
       ["TraitInfo.ct", "Ragnarok2::Trait", :delete_all=>true], #before items, before trait-part1
       ["TraitInfo2.ct", "Ragnarok2::Trait"], #before items
@@ -256,13 +276,13 @@ namespace :ragnarok2 do
 
   desc "Search through ct files to find a value"
   task :search_ct => [:environment] do
-    #search_value = "45"
-    #Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', "*.ct")).sort.each do |file|
+    search_value = "40010000"
+    Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', "*.ct")).sort.each do |file|
 
-    #  ext = FileExtractor_ct.new(file)
-    #  puts file if ext.data.flatten.collect{|v| v.to_s}.include?(search_value)
-    #end
-    
+      ext = FileExtractor_ct.new(file)
+      puts file if ext.data.flatten.collect{|v| v.to_s}.include?(search_value)
+    end
+=begin
     Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', '**', "*.ct")).each do |file|
       begin
         file = FileExtractor_ct.new(file, :debug=>true)
@@ -270,6 +290,7 @@ namespace :ragnarok2 do
         puts "ERROR: #{file}: #{$!}"
       end
     end
+=end
   end
 
   desc "Reads and converts *.dds icons to png"
