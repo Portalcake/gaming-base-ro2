@@ -186,6 +186,10 @@ namespace :ragnarok2 do
     m.map_column("ID", "skill_id")
     m.map_column("Name", "name_fallback")
     m.map_column("Skill_Group", "skill_group_id")
+
+    m = DatabaseMapper.new("Ragnarok2::Job", :partial=>true, :find_by=>:job_id)
+    m.map_column("ID", "job_id")
+    m.map_column("Name", "name_fallback")
   end
 
 
@@ -243,6 +247,12 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
+      #["KHARA_Title_Info.ct", ""],
+      #["Khara_Info.ct", ""],
+      #["TokenName.ct", ""],
+      #["TokenFile.ct", ""],
+      #["ItemCashInfo.ct", ""],
+      ["JobInfo.ct", "Ragnarok2::Job"],
       ["Skill_Table_SkillLevel.ct", "Ragnarok2::Skill"],
       ["Skill_Table_Base.ct", "Ragnarok2::SkillGroup"],
       ["SetTrait.ct", "Ragnarok2::SetTrait"], #before itemset
@@ -276,7 +286,7 @@ namespace :ragnarok2 do
 
   desc "Search through ct files to find a value"
   task :search_ct => [:environment] do
-    search_value = "40010000"
+    search_value = "3300000102"
     Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', "*.ct")).sort.each do |file|
 
       ext = FileExtractor_ct.new(file)

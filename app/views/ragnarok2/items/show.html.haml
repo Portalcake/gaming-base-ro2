@@ -13,8 +13,8 @@
         .requirement Level: #{@item.require_level}
       - unless @item.require_sex.zero?
         .requirement Gender: #{human_gender(@item.require_sex)}
-      - unless @item.require_job.zero?
-        .requirement Job: #{@item.require_job}
+      - unless @item.jobs.empty?
+        .requirement Job: #{@item.jobs.join(", ")}
 
   .box
     %span.title Properties

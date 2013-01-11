@@ -20,6 +20,7 @@ module Ragnarok2
             :class_name => "Ragnarok2::Translations::ItemDescription"
 
     belongs_to :category,
+            :inverse_of => :items,
             :foreign_key => :category_id,
             :class_name => "Ragnarok2::ItemCategory",
             :counter_cache => true
@@ -56,9 +57,13 @@ module Ragnarok2
             :foreign_key => :result_id,
             :order => 'grade ASC'
 
+    has_many :item_jobs, :dependent => :destroy
+    default_scope includes(:jobs)
+    has_many :jobs, :through=>:item_jobs
+
 
     before_validation :update_category
-    before_save :update_icon_name
+    before_save :update_icon_name, :update_required_joblist
 
     scope :default_order, order("ragnarok2_items.require_level ASC, ragnarok2_translations_item_names.translation ASC")
 
@@ -84,6 +89,16 @@ module Ragnarok2
         name = self.icon.scan(/[^\\\/]+\.dds/).first
         name = name.gsub(".dds", "").downcase if name
         self.icon = name
+    end
+
+    def update_required_joblist(force=false)
+        return unless self.require_job_changed? || force
+
+        jobs = []
+        self.require_job.to_s(2).reverse.split("").each_with_index do |enabled, job_id|
+          jobs << job_id+1 unless enabled.to_i.zero?
+        end
+        self.jobs = Ragnarok2::Job.where(:job_id=>jobs)
     end
   end
 end

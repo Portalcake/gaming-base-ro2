@@ -1,12 +1,22 @@
 .skill[skill]
   .box
     %span.title.name= "#{skill.name} (Level #{skill.skill_level})"
+    .skill_description= skill.description
     .requirements
-      .requirement SP: #{skill.use_sp}, HP: #{skill.use_hp}
-      .requirement Casting Time #{[skill.casting_time, skill.minimum_casting_time].sort.join(" ~ ")}
-      .requirement Execution time #{skill.excution_time}
-      .requirement Cooldown time #{skill.cooldown_time}
-      .requirement Effect duration #{skill.effect_duration}
-      .requirement Tick interval #{skill.tick_interval}
+      - unless skill.use_sp.zero?
+        .requirement SP: #{skill.use_sp}
+      - unless skill.use_hp.zero?
+        .requirement HP: #{skill.use_hp}
+      .requirement
+        Casting Time
+        - if [skill.casting_time, skill.minimum_casting_time].sort.first.zero?
+          Instant
+        - else
+          = [skill.casting_time, skill.minimum_casting_time].sort.collect{|t| "#{t}s"}.join(" ~ ")
+      .requirement Execution time #{skill.excution_time}s
+      .requirement Cooldown time #{skill.cooldown_time}s
+      .requirement Effect duration #{skill.effect_duration}s
+      .requirement Tick interval #{skill.tick_interval}s
+      .requirement Max. amount of targets #{skill.skill_damage_quantity}
 
 = render "/share/development_box", :model => skill

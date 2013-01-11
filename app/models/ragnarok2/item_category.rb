@@ -17,7 +17,7 @@ module Ragnarok2
             :foreign_key => :category_id
 
     #always hide empty categories
-    scope :not_empty ,where("ragnarok2_item_categories.items_count > 0 ")
+    scope :not_empty, where("ragnarok2_item_categories.items_count > 0")
 
     def to_s
       "#{self.name}"

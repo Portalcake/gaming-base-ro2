@@ -4,3 +4,5 @@
   .category= item.category
   - unless item.require_level.zero?
     .attribute Required Level: #{item.require_level}
+  - unless item.jobs.empty?
+    .requirement Job: #{item.jobs.join(", ")}
