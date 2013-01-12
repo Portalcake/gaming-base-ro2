@@ -2,6 +2,7 @@ module Ragnarok2::ApplicationHelper
   def ragnarok2_build_page_navigation
     Proc.new do |primary|
       primary.item :news, "News", news_index_path, :highlights_on=>/ro2\/[a-z]{2}\/news/
+      primary.item :forum, "Forum", forum.topics_path
       primary.item :placeholder_news, "", :class => :placeholder
       primary.item :quests, "Quests", quests_path, :highlights_on=>/ro2\/[a-z]{2}\/quests/
       primary.item :cititzens, "NPCs", citizens_path, :highlights_on=>/ro2\/[a-z]{2}\/citizens/
