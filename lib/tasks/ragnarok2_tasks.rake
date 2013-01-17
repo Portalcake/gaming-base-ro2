@@ -56,6 +56,10 @@ namespace :ragnarok2 do
     m.map_column("String_ID", "skill_id")
     m.map_column("Skill_Description", "translation")
 
+    m = DatabaseMapper.new("Ragnarok2::Translations::Khara", :partial=>true, :find_by=>:quest_id)
+    m.map_column("Quest_Title", "title")
+    m.map_column("SUMMARY_TEXT", "summary")
+
     m = DatabaseMapper.new("Ragnarok2::Quest", :partial=>true, :find_by=>:quest_id)
     m.map_column("Errpr_MSG_ID", "Error_MSG_ID") #corrent spelling
 
@@ -190,6 +194,12 @@ namespace :ragnarok2 do
     m = DatabaseMapper.new("Ragnarok2::Job", :partial=>true, :find_by=>:job_id)
     m.map_column("ID", "job_id")
     m.map_column("Name", "name_fallback")
+
+    m = DatabaseMapper.new("Ragnarok2::Khara", :partial=>true, :delete_all=>:true)
+    m.map_column("Icon_Path", "icon")
+    m.map_column("Errpr_MSG_ID", "error_msg_id")
+
+    m = DatabaseMapper.new("Ragnarok2::KharaTitle", :partial=>true, :find_by=>:title_id)
   end
 
 
@@ -218,6 +228,7 @@ namespace :ragnarok2 do
   task :tbl => [:load_mappers, :environment] do
 
     [
+      ["string_Khara_text.tbl", "Ragnarok2::Translations::Khara"],
       ["String_Skill_Name.tbl", "Ragnarok2::Translations::SkillName"],
       ["String_Skill_Description.tbl", "Ragnarok2::Translations::SkillDescription"],
       ["String_TraitName.tbl", "Ragnarok2::Translations::TraitName"],
@@ -247,11 +258,11 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
-      #["KHARA_Title_Info.ct", ""],
-      #["Khara_Info.ct", ""],
       #["TokenName.ct", ""],
       #["TokenFile.ct", ""],
       #["ItemCashInfo.ct", ""],
+      ["KHARA_Title_Info.ct", "Ragnarok2::KharaTitle"],
+      ["Khara_Info.ct", "Ragnarok2::Khara"],
       ["JobInfo.ct", "Ragnarok2::Job"],
       ["Skill_Table_SkillLevel.ct", "Ragnarok2::Skill"],
       ["Skill_Table_Base.ct", "Ragnarok2::SkillGroup"],

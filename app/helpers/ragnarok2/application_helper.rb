@@ -5,6 +5,7 @@ module Ragnarok2::ApplicationHelper
       primary.item :forum, "Forum", forum.topics_path
       primary.item :placeholder_news, "", :class => :placeholder
       primary.item :quests, "Quests", quests_path, :highlights_on=>/ro2\/[a-z]{2}\/quests/
+      primary.item :khara, "Khara", kharas_path, :highlights_on=>/ro2\/[a-z]{2}\/kharas/
       primary.item :cititzens, "NPCs", citizens_path, :highlights_on=>/ro2\/[a-z]{2}\/citizens/
       primary.item :items, "Items", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items/ do |i|
         i.item :items, "All items", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items\/?$/

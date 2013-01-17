@@ -6,7 +6,7 @@ Ragnarok2::Engine.routes.draw do
           :only => [:index, :show] do
 
           resources :quests, :citizens, :items, :maps,
-                    :item_sets, :dungeons
+                    :item_sets, :dungeons, :kharas
 
           resources :skill_groups, :path=>"skills"
           
