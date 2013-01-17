@@ -34,7 +34,7 @@ module Ragnarok2
     has_many :citizen_items, :dependent => :destroy
     has_many :items, :through => :citizen_items
 
-    scope :default_order, order("ragnarok2_translations_citizen_names.translation ASC")
+    scope :default_order, order("ragnarok2_citizens.min_level ASC, ragnarok2_translations_citizen_names.translation ASC")
 
     def to_s
       "#{self.name}"

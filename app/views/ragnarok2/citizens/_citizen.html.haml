@@ -1,6 +1,7 @@
 %div[citizen]{:class=>[:citizen, :model_listing, cycle("odd", "even")]}
   .model_name
     = link_to citizen, citizen
+    %span.disabled= human_element(citizen.element)
     - if citizen.job_name
-      %br
-      = citizen.job_name
+      .attribute= citizen.job_name
+  .attribute Level #{citizen.min_level} ~ #{citizen.max_level}
