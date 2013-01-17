@@ -6,6 +6,7 @@
     .attribute #{@citizen.job_name}
     .attribute Level #{@citizen.min_level} ~ #{@citizen.max_level}
     .attribute EXP #{@citizen.exp.join(" ~ ")}
+    .attribute Element #{human_element(@citizen.element)}
     .attribute Base EXP multiplier #{@citizen.base_exp_multiplier}
     .attribute Lisence EXP multiplier #{@citizen.lisence_exp_multiplier}
 
