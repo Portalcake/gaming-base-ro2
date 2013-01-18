@@ -38,4 +38,8 @@ module Ragnarok2::ApplicationHelper
   def ragnarok2_human_percent(value)
     number_to_percentage(value.to_f/100, :precision=>2)
   end
+
+  def ragnarok2_human_description(text)
+    text.to_s.gsub(/^"|"$/, '').gsub('\n', "\n")
+  end
 end

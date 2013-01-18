@@ -10,4 +10,12 @@
   & .model_name {
     padding-top:7px;
   }
+  & .description {
+    float:right;
+    display:block;
+    text-align: right;
+    p {
+      margin:7px 0px 0px 0px;
+    }
+  }
 }

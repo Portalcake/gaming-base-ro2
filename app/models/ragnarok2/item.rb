@@ -13,7 +13,7 @@ module Ragnarok2
             :primary_key => :item_id,
             :class_name => "Ragnarok2::Translations::ItemName"
 
-    #default_scope includes(:description)
+    default_scope includes(:description)
     belongs_to :description,
             :foreign_key => :string_item_description,
             :primary_key => :item_id,
@@ -56,6 +56,11 @@ module Ragnarok2
             :primary_key => :item_break_result_id,
             :foreign_key => :result_id,
             :order => 'grade ASC'
+
+    default_scope includes(:skill)
+    belongs_to :skill,
+            :primary_key => :skill_id,
+            :foreign_key => :skill_id_1
 
     has_many :item_jobs, :dependent => :destroy
     default_scope includes(:jobs)
