@@ -1,2 +1,7 @@
 %div[item_set]{:class=>[:item_set, :model_listing, cycle("odd", "even")]}
+  .model_icon= ragnarok2_icon_image_tag(item_set.parts.first.icon, :alt=>"")
   .model_name= link_to item_set, item_set
+  .parts
+    Parts:
+    = link_to item_set.parts.first, item_set.parts.first
+    \...

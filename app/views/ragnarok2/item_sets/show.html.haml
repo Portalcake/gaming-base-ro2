@@ -1,5 +1,7 @@
 .model_details.item_set
-  %h2= @item_set
+  .header
+    .model_icon= ragnarok2_icon_image_tag(@item_set.parts.first.icon, :alt=>@item_set.parts.first.name)
+    %h2= @item_set
 
   .box
     %span.title Parts
@@ -13,6 +15,9 @@
 
   .box
     %span.title Properties
+    .error
+      Those values have not been verified yet and need to be recalculated (e.g. devided by 10 to get percents or something similiar).
+      = link_to "Please help us.", main_app.missing_information_path
     .properties
       - if @item_set.traits.empty?
         None

@@ -269,8 +269,10 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
-      #["TokenName.ct", ""],
-      #["TokenFile.ct", ""],
+      ["function_npc_icon.ct", ""],
+      ["DungeonMission.ct", ""],
+      #["TokenName.ct", ""], #depricated?
+      #["TokenFile.ct", ""], #depricated?
       ["ItemCashInfo.ct", "Ragnarok2::ItemCashInfo"],
       ["KHARA_Title_Info.ct", "Ragnarok2::KharaTitle"],
       ["Khara_Info.ct", "Ragnarok2::Khara"],
@@ -295,8 +297,8 @@ namespace :ragnarok2 do
       ["BreakResult.ct", "Ragnarok2::ItemBreakResult"]
     ].each do |file, class_name, opts|
 
-      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
-
+      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file), :debug => true)
+exit
       mapper = DatabaseMapper.find(
         :header => file.header,
         :class_name => class_name

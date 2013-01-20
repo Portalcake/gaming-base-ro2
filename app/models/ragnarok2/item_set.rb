@@ -14,6 +14,12 @@ module Ragnarok2
             :class_name => "Ragnarok2::Translations::ItemSet"
 
     has_many :set_items, :dependent => :destroy
+    has_many :parts,
+            :through => :set_items,
+            :source => :main_item
+    has_many :alternative_parts,
+            :through => :set_items,
+            :source => :alternative_item
 
     has_many :set_traits,
             :foreign_key => :set_id,

@@ -57,7 +57,7 @@
   - unless @item.citizens.empty?
     .box
       %span.title Buyable at
-      - @item.citizens.each do |citizen|
+      - @item.citizens.default_order.each do |citizen|
         .merchant
           = link_to(citizen, citizen)
 

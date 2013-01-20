@@ -37,8 +37,8 @@
   - unless @citizen.items.empty?
     .box
       %span.title Sells
-      - @citizen.items.each do |item|
+      - @citizen.items.default_order.each do |item|
         .merchant
-          = link_to(item, item)
+          = render item
 
 = render "/share/development_box", :model => @citizen
