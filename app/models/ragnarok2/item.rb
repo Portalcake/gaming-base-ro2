@@ -25,6 +25,12 @@ module Ragnarok2
             :class_name => "Ragnarok2::ItemCategory",
             :counter_cache => true
 
+    belongs_to :cash_shop_info,
+            :inverse_of => :item,
+            :foreign_key => :item_id,
+            :primary_key => :item_id,
+            :class_name => "Ragnarok2::ItemCashInfo"
+
     has_many :quest_item_rewards, :dependent => :destroy
     has_many :quests, :through => :quest_item_rewards
 

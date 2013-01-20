@@ -203,6 +203,14 @@ namespace :ragnarok2 do
     m.map_column("Errpr_MSG_ID", "error_msg_id")
 
     m = DatabaseMapper.new("Ragnarok2::KharaTitle", :partial=>true, :find_by=>:title_id)
+
+    m = DatabaseMapper.new("Ragnarok2::ItemCashInfo", :partial=>true, :find_by=>:item_id)
+    m.map_column("ItemStringName", nil)
+    m.map_column("ItemDescription", nil)
+    m.map_column("Contents_Type", "content_type")
+    m.map_column("Duration_Time", "duration_value")
+    m.map_column("Cash_Icon", nil)
+    m.map_column("DurationExtend_GroupID", "duration_extend_group_id")
   end
 
 
@@ -263,7 +271,7 @@ namespace :ragnarok2 do
     [
       #["TokenName.ct", ""],
       #["TokenFile.ct", ""],
-      #["ItemCashInfo.ct", ""],
+      ["ItemCashInfo.ct", "Ragnarok2::ItemCashInfo"],
       ["KHARA_Title_Info.ct", "Ragnarok2::KharaTitle"],
       ["Khara_Info.ct", "Ragnarok2::Khara"],
       ["JobInfo.ct", "Ragnarok2::Job"],

@@ -2,6 +2,7 @@ require_dependency "ragnarok2/application_controller"
 
 module Ragnarok2
   class ItemCategoriesController < ApplicationController
+    helper "Ragnarok2/Items"
 
     def show
       @item_category = ItemCategory.find(params[:id])

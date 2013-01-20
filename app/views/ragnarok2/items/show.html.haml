@@ -20,6 +20,12 @@
 
   .box
     %span.title Properties
+    - if @item.cash_shop_info
+      .property
+        %span.cashshop CashShop-Item
+        = surround '(', ')' do
+          = human_cash_shop_duration(@item.cash_shop_info)
+        
     - unless @item.traits.empty?
       - @item.traits.each do |trait|
         .property= render trait
