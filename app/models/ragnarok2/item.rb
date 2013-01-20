@@ -79,11 +79,16 @@ module Ragnarok2
     end
 
     def categories
+        high_category, medium_category, low_category = nil
         high_category = ItemCategory.where(:high_category=>self.high_category_id, :medium_category=>0, :low_category=>0).first
         
+        unless self.medium_category_id.zero?
         medium_category = ItemCategory.where(:high_category=>self.high_category_id, :medium_category=>self.medium_category_id, :low_category=>0).first
+        end
         
+        unless self.low_category_id.zero?
         low_category = ItemCategory.where(:high_category=>self.high_category_id, :medium_category=>self.medium_category_id, :low_category=>self.low_category_id).first
+        end
 
         [high_category, medium_category, low_category].compact
     end
