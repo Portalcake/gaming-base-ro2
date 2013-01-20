@@ -4,13 +4,22 @@ module Ragnarok2
   class ItemCategoriesController < ApplicationController
 
     def show
-      if params[:q].nil? || params[:q].length.zero?
-        item_models = Item
-      else
-        item_models = Item.where("ragnarok2_translations_item_names.translation LIKE ?", "%#{params[:q]}%")
+      @item_category = ItemCategory.find(params[:id])
+      @items = Item.default_order.where(:high_category_id => @item_category.high_category)
+
+      unless @item_category.medium_category.zero?
+        @items = @items.where(:medium_category_id => @item_category.medium_category)
+
+        unless @item_category.low_category.zero?
+          @items = @items.where(:low_category_id => @item_category.low_category)
+        end
       end
 
-      respond_with(@items = item_models.default_order.where(:category_id=>params[:id]).page(params[:page]))
+      unless params[:q].nil? || params[:q].length.zero?
+        @items = @items.where("ragnarok2_translations_item_names.translation LIKE ?", "%#{params[:q]}%")
+      end
+
+      respond_with(@items = @items.page(params[:page]))
     end
 
   end

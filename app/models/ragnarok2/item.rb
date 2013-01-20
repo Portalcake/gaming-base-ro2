@@ -66,8 +66,6 @@ module Ragnarok2
     default_scope includes(:jobs)
     has_many :jobs, :through=>:item_jobs
 
-
-    before_validation :update_category
     before_save :update_icon_name, :update_required_joblist
 
     scope :default_order, order("ragnarok2_items.require_level ASC, ragnarok2_translations_item_names.translation ASC")
@@ -80,14 +78,17 @@ module Ragnarok2
       "#{self.id}-#{self.name.to_s.parameterize}"
     end
 
-    private 
-    def update_category
-        self.category = ItemCategory.where(
-            :high_category => self.high_category,
-            :medium_category => self.medium_category,
-            :low_category => self.low_category,
-        ).first
+    def categories
+        high_category = ItemCategory.where(:high_category=>self.high_category_id, :medium_category=>0, :low_category=>0).first
+        
+        medium_category = ItemCategory.where(:high_category=>self.high_category_id, :medium_category=>self.medium_category_id, :low_category=>0).first
+        
+        low_category = ItemCategory.where(:high_category=>self.high_category_id, :medium_category=>self.medium_category_id, :low_category=>self.low_category_id).first
+
+        [high_category, medium_category, low_category].compact
     end
+
+    private 
 
     def update_icon_name
         return unless self.icon_changed?

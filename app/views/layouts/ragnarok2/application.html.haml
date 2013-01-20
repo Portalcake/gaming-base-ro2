@@ -10,7 +10,7 @@
 - content_for :main_navigation do
   = render_navigation :level => 1, &ragnarok2_build_page_navigation
 - content_for :sub_navigation do
-  = (render_navigation :level => 2, &ragnarok2_build_page_navigation) || content_tag(:div)
+  = (render_navigation :level => 2..4, &ragnarok2_build_page_navigation) || content_tag(:div)
 
 - content_for :content do
   = yield

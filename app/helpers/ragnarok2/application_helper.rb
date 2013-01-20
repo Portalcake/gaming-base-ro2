@@ -10,12 +10,40 @@ module Ragnarok2::ApplicationHelper
       primary.item :items, "Items", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items/ do |i|
         i.item :items, "All items", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items\/?$/
         i.item :placeholder_items, "", :class => :placeholder
-        Ragnarok2::ItemCategory.not_empty.all.each do |item_category|
-          i.item item_category.category_id,
-                  item_category.to_s,
-                  url_for(item_category),
-                  :highlights_on=>Regexp.new("/ro2/[a-z]{2}/item_categories/#{item_category.id}-")
+
+
+        item_categories = Ragnarok2::ItemCategory.all
+        
+        high_item_categories = item_categories.select{|c| c.medium_category.zero? && c.low_category.zero?}
+
+        high_item_categories.each do |category|
+          i.item category.category_id,
+            category.to_s.pluralize,
+            url_for(category),
+            :highlights_on=>Regexp.new("/ro2/[a-z]{2}/item_categories/#{category.id}-") do |i2|
+
+              medium_item_categories = item_categories.select{|c| c.high_category == category.high_category && !c.medium_category.zero? && c.low_category.zero?}
+
+              medium_item_categories.each do |category|
+                i2.item category.category_id,
+                  category.to_s.pluralize,
+                  url_for(category),
+                  :highlights_on=>Regexp.new("/ro2/[a-z]{2}/item_categories/#{category.id}-") do |i3|
+
+                    low_item_categories = item_categories.select{|c| c.high_category == category.high_category && c.medium_category == category.medium_category && !c.low_category.zero?}
+
+                    low_item_categories.each do |category|
+                      i3.item category.category_id,
+                        category.to_s.pluralize,
+                        url_for(category),
+                        :highlights_on=>Regexp.new("/ro2/[a-z]{2}/item_categories/#{category.id}-")
+                    end
+                  end
+              end
+            end
+
         end
+
       end
       primary.item :set_items, "Item Sets", item_sets_path, :highlights_on=>/ro2\/[a-z]{2}\/item_sets/
       primary.item :maps, "Maps", maps_path, :highlights_on=>/ro2\/[a-z]{2}\/maps/
