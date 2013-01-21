@@ -227,9 +227,24 @@ namespace :ragnarok2 do
     m.map_column("ID", "job_id")
     m.map_column("Name", "name_fallback")
 
-    m = DatabaseMapper.new("Ragnarok2::Khara", :partial=>true, :delete_all=>:true)
+    m = DatabaseMapper.new("Ragnarok2::Khara", :partial=>true)
     m.map_column("Icon_Path", "icon")
     m.map_column("Errpr_MSG_ID", "error_msg_id")
+    m.before_load = Proc.new {
+      Ragnarok2::Khara.where(:quest_type=>0).delete_all
+    }
+    m.loader = Proc.new {|entry, ientry|
+      #main-task, need to be preserved if possible
+      unless entry[:quest_type].to_i.zero?
+        task = Ragnarok2::Khara.where(:quest_id => entry[:quest_id]).where("quest_type != 0").first_or_initialize
+        task.update_attributes(entry, :without_protection=>true)
+      else #sub-task
+        task = Ragnarok2::Khara.create
+        task.update_attributes(entry, :without_protection=>true)
+      end
+
+      task.save ? true : false
+    }
 
     m = DatabaseMapper.new("Ragnarok2::KharaTitle", :partial=>true, :find_by=>:title_id)
 
@@ -330,7 +345,7 @@ namespace :ragnarok2 do
     ].each do |file, class_name, opts|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
-      
+
       mapper = DatabaseMapper.find(
         :header => file.header,
         :class_name => class_name
@@ -342,7 +357,7 @@ namespace :ragnarok2 do
 
   desc "Search through ct files to find a value"
   task :search_ct => [:environment] do
-    search_value = "3300000102"
+    search_value = "30000059"
     Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', "*.ct")).sort.each do |file|
 
       ext = FileExtractor_ct.new(file)

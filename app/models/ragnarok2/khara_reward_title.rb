@@ -22,7 +22,5 @@ module Ragnarok2
       end
       bonus
     end
-
-
   end
 end

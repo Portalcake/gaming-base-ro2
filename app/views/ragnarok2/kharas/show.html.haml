@@ -4,20 +4,38 @@
 
   .box
     %span.title Requirements
+    .requirement= booleanize_string("Auto challenge", !@khara.auto_challenge.zero?)
     .requirement Level #{@khara.min_base_level} ~ #{@khara.max_base_level}
     - unless @khara.min_projob_level.zero?
       .requirement ProJob Level #{@khara.min_base_level} ~ #{@khara.max_base_level}
     - unless @khara.min_khara_point.zero?
       .requirement Khara Points #{@khara.min_khara_point} ~ #{@khara.max_khara_point}
 
-  .box
-    %span.title Tasks
-    .task
-      - if @khara.complete_type == 2
-        - target = Ragnarok2::Citizen.find_by_citizen_id(@khara.complete_type_value1)
-        .task Hunt #{@khara.complete_type_value2} #{link_to target.to_s.pluralize(@khara.complete_type_value2), target}
+    - unless @khara.condition_type.zero?
+      - case @khara.condition_type
+        - when 8
+          - quest = Ragnarok2::Quest.find_by_quest_id(@khara.condition_value1)
+          Quest #{link_to quest, quest}
       - else
         = render "share/missing_information"
+
+  .box
+    %span.title Tasks
+    .tasks
+      - unless @khara.limit_time.zero?
+        .task Timelimit #{@khara.limit_time}
+      - @khara.tasks.each_with_index do |task|
+        .task
+          - case task.complete_type
+            - when 2
+              - target = Ragnarok2::Citizen.find_by_citizen_id(task.complete_type_value1)
+              .task Hunt #{task.complete_type_value2} #{link_to target.to_s.pluralize(task.complete_type_value2), target}
+            - when 4
+              - target = Ragnarok2::Item.find_by_item_id(task.complete_type_value1)
+              .task Get #{task.complete_type_value2} #{link_to target.to_s.pluralize(task.complete_type_value2), target}
+          - else
+            = render "share/missing_information"
+          = render "/share/development_box", :model => task
 
   .box
     %span.title Rewards
