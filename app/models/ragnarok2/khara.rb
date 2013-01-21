@@ -19,6 +19,11 @@ module Ragnarok2
             :foreign_key => :reward_npc_id,
             :primary_key => :citizen_id
 
+    default_scope includes(:reward_title)
+    has_one :reward_title,
+            :class_name => "Ragnarok2::KharaTitle",
+            :foreign_key => :title_id,
+            :primary_key => :reward_title_id
 
     scope :default_order, order("ragnarok2_kharas.min_base_level ASC, ragnarok2_translations_kharas.title ASC")
 

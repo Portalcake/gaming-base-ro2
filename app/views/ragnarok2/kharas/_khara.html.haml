@@ -1,3 +1,7 @@
 %div[khara]{:class=>[:khara, :model_listing, cycle("odd", "even")]}
   .model_name= link_to khara, khara
   .attributes Level #{khara.min_base_level} ~ #{khara.max_base_level}
+  - if khara.reward_title
+    .reward.khara_title
+      Reward title:
+      = khara.reward_title

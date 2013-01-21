@@ -52,6 +52,35 @@ namespace :ragnarok2 do
     m.map_column("String_ID", "skill_id")
     m.map_column("Skill_Name", "translation")
 
+    m = DatabaseMapper.new("Ragnarok2::Translations::KharaRewardTitle", :partial=>true, :find_by=>:title_id)
+    m.map_column("ID", "title_id")
+    m.loader = Proc.new {|entry, ientry|
+      rtitle = Ragnarok2::Translations::KharaRewardTitle.where(:title_id=>entry[:title_id]).first_or_initialize
+
+      #manually merge files into one table
+      if entry[:name]
+        rtitle.title = entry[:name]
+      end
+      if entry[:description]
+        rtitle.description_long = entry[:description]
+      end
+      if entry[:detail_desc]
+        rtitle.description_short = entry[:detail_desc]
+      end
+
+      if rtitle.save
+        true
+      else
+        rtitle.destroy unless rtitle.new_record?
+        false
+      end
+    }
+
+    m = DatabaseMapper.new("Ragnarok2::KharaRewardTitle", :partial=>true, :find_by=>:title_id)
+    m.map_column("ID", "title_id")
+    m.map_column("Detail_Desc", "bonus_attributes")
+
+
     m = DatabaseMapper.new("Ragnarok2::Translations::SkillDescription", :partial=>true, :find_by=>:skill_id)
     m.map_column("String_ID", "skill_id")
     m.map_column("Skill_Description", "translation")
@@ -239,6 +268,10 @@ namespace :ragnarok2 do
   task :tbl => [:load_mappers, :environment] do
 
     [
+      ["String_Title_Name.tbl", "Ragnarok2::Translations::KharaRewardTitle"], #before String_Title_Detail_Desc, String_Title_Description
+      ["String_Title_Description.tbl", "Ragnarok2::Translations::KharaRewardTitle"],
+      ["String_Title_Detail_Desc.tbl", "Ragnarok2::Translations::KharaRewardTitle"],
+      ["String_Title_Detail_Desc.tbl", "Ragnarok2::KharaRewardTitle"],
       ["string_Khara_text.tbl", "Ragnarok2::Translations::Khara"],
       ["String_Skill_Name.tbl", "Ragnarok2::Translations::SkillName"],
       ["String_Skill_Description.tbl", "Ragnarok2::Translations::SkillDescription"],
@@ -297,7 +330,7 @@ namespace :ragnarok2 do
     ].each do |file, class_name, opts|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
-
+      
       mapper = DatabaseMapper.find(
         :header => file.header,
         :class_name => class_name

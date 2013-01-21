@@ -10,7 +10,6 @@
     - unless @khara.min_khara_point.zero?
       .requirement Khara Points #{@khara.min_khara_point} ~ #{@khara.max_khara_point}
 
-
   .box
     %span.title Tasks
     .task
@@ -22,9 +21,20 @@
 
   .box
     %span.title Rewards
+    .reward= booleanize_string("Automatic reward", !@khara.reward_auto.zero?)
     - if @khara.citizen
       .reward Rewards given by #{@khara.citizen}
-    .reward #{@khara.reward_khara_point} Khara points
-    .reward #{@khara.reward_honor_point} Honor points
+    - if @khara.reward_title
+      .reward.khara_title
+        Title:
+        = @khara.reward_title
+        %ul
+          = list_of @khara.reward_title.khara_attributes.bonus_attributes do |attribute, value|
+            = attribute.to_s.capitalize
+            = value
+    - unless @khara.reward_khara_point.zero?
+      .reward #{@khara.reward_khara_point} Khara points
+    - unless @khara.reward_honor_point.zero?
+      .reward #{@khara.reward_honor_point} Honor points
 
 = render "/share/development_box", :model => @khara
