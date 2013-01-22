@@ -48,7 +48,7 @@
         = @khara.reward_title
         %ul
           = list_of @khara.reward_title.khara_attributes.bonus_attributes do |attribute, value|
-            = attribute.to_s.capitalize
+            = attribute.to_s.upcase
             = value
     - unless @khara.reward_khara_point.zero?
       .reward #{@khara.reward_khara_point} Khara points

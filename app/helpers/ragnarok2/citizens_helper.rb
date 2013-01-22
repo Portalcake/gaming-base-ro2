@@ -20,5 +20,28 @@ module Ragnarok2
         content_tag(:i, "unknown")
       end
     end
+
+    def human_race(value)
+      case value
+      when 11
+        "Insect"
+      when 12
+        "Animal"
+      when 13
+        "Plant"
+      when 14
+        "Humanoid"
+      when 15
+        "Fish"
+      when 16
+        "Undead"
+      when 17
+        "Deamon"
+      when 20
+        "Misc."
+      else
+        content_tag(:i, "unknown")
+      end
+    end
   end
 end
