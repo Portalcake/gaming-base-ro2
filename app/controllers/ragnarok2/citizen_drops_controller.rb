@@ -70,24 +70,24 @@ module Ragnarok2
 
       @results = []
       if params[:citizen_id]
-        @citizen = Citizen.find(params[:citizen_id])
+        @base_model = Citizen.find(params[:citizen_id])
         @results = Item.default_order.search_by_name(params[:q]).limit(15)
-        unless @citizen.items.empty?
-          @results = @results.where("ragnarok2_items.id NOT IN (?)", @citizen.items)
+        unless @base_model.items.empty?
+          @results = @results.where("ragnarok2_items.id NOT IN (?)", @base_model.items)
         end
       end
       if params[:item_id]
-        @item = Item.find(params[:item_id])
+        @base_model = Item.find(params[:item_id])
         @results = Citizen.default_order.search_by_name(params[:q]).limit(15)
-        unless @item.citizens.empty?
-          @results = @results.where("ragnarok2_citizens.id NOT IN (?)", @item.citizens)
+        unless @base_model.citizens.empty?
+          @results = @results.where("ragnarok2_citizens.id NOT IN (?)", @base_model.citizens)
         end
       end
 
       respond_to do |format|
         format.js
         format.html {
-          @drop = @citizen.drops.new
+          @drop = @base_model.drops.new
           render 'new'
         }
       end
