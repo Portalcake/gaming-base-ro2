@@ -10,6 +10,8 @@
       .requirement ProJob Level #{@khara.min_base_level} ~ #{@khara.max_base_level}
     - unless @khara.min_khara_point.zero?
       .requirement Khara Points #{@khara.min_khara_point} ~ #{@khara.max_khara_point}
+    - unless @khara.need_khara_point.zero?
+      .requirement Khara Points #{@khara.need_khara_point}
 
     - unless @khara.condition_type.zero?
       - case @khara.condition_type
@@ -39,15 +41,36 @@
             - when 15
               = pluralize(task.complete_type_value1, "Profession level")
               archived
+            - when 16
+              Acquire
+              = pluralize(task.complete_type_value1, "Rupee")
             - when 17
               - target = Ragnarok2::ItemCategory.find_by_high_category(task.complete_type_value1)
               Refine #{task.complete_type_value2} #{link_to target.to_s.pluralize(task.complete_type_value2), target}
             - when 18
               - target = Ragnarok2::ItemCategory.find_by_high_category(task.complete_type_value1)
               Successfully refine #{task.complete_type_value2} #{link_to target.to_s.pluralize(task.complete_type_value2), target}
+            - when 19
+              Successfully create
+              = pluralize(task.complete_type_value1, "items")
+            - when 20
+              Acquire
+              = pluralize(task.complete_type_value1, "Card")
             - when 22
               = pluralize(task.complete_type_value1, "title")
               acquired
+            - when 26
+              Die
+              = pluralize(task.complete_type_value1, "time")
+            - when 27
+              Be resurrected
+              = pluralize(task.complete_type_value1, "time")
+            - when 30
+              Repair
+              = pluralize(task.complete_type_value1, "items")
+            - when 32
+              Summon
+              = pluralize(task.complete_type_value1, "Guardian")
             - when 40
               - target = Ragnarok2::Khara.main_quests.find_by_quest_id(task.complete_type_value1)
               Complete #{link_to target, target}
