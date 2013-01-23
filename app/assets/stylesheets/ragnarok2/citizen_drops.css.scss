@@ -1,0 +1,13 @@
+.search_result {
+  table {
+    width:100%;
+    & .search_checkbox {
+      width:50px;
+      text-align: center;
+      padding-top: 10px;
+    }
+  }
+}
+#drop_search {
+  padding-top:15px;
+}

@@ -5,8 +5,20 @@ Ragnarok2::Engine.routes.draw do
           #:defaults => {:game_locale => "en"},
           :only => [:index, :show] do
 
-          resources :quests, :citizens, :items, :maps,
+          resources :quests, :items, :citizens, :maps,
                     :item_sets, :dungeons, :kharas
+
+          resources :citizen_drops,
+                      :path=>"drops",
+                      :only=>[:new, :destroy, :create],
+                      :as => :drops do
+            collection do
+              post 'search'
+            end
+            member do
+              post 'vote'
+            end
+          end
 
           resources :skill_groups, :path=>"skills"
           

@@ -54,12 +54,21 @@
           = link_to(reward.quest, reward.quest)
           (#{pluralize(reward.amount, "pieces")})
 
-  - unless @item.citizens.empty?
+  - unless @item.sellcitizens.empty?
     .box
       %span.title Buyable at
-      - @item.citizens.default_order.each do |citizen|
+      - @item.sellcitizens.default_order.each do |citizen|
         .merchant
           = link_to(citizen, citizen)
+
+  .box
+    %span.title Drops from
+    - if @item.drops.empty?
+      .drop Nothing
+    - else 
+      = render @item.drops
+    .drop_add
+      = link_to "» Add monsters", new_drop_path(:item_id=>@item.id)
 
   - unless (@item.main_sets+@item.alternative_sets).empty?
     .box

@@ -1,0 +1,33 @@
+%div[citizen_drop]
+  - if @citizen
+    - base_model = :citizen
+    = link_to citizen_drop.item, citizen_drop.item
+  - else
+    - base_model = :item
+    = link_to citizen_drop.citizen, citizen_drop.citizen
+  = surround "(", ")" do
+    Votes:
+    #{citizen_drop.approving_users_count} up,
+    #{citizen_drop.disapproving_users_count} down
+
+  - if user_signed_in?
+    - if user_vote = citizen_drop.votes.where(:user_id=>current_user.id).first
+      = surround "[", "]" do
+        You
+        - if user_vote.approved?
+          approved.
+        - else
+          disapproved.
+        = link_to "retire", vote_drop_path(citizen_drop, :retire=>1, :ref=>base_model), :method=>:post
+    - elsif user_can?(:vote, citizen_drop)
+      = surround "[", "]" do
+        = succeed "," do
+          = link_to "Approve", vote_drop_path(citizen_drop, :approve=>1, :ref=>base_model), :method=>:post
+        = link_to "Disapprove", vote_drop_path(citizen_drop, :approve=>0, :ref=>base_model), :method=>:post
+    - else
+      You are not allowedto vote.
+
+  - else
+    %span.disabled
+      = surround "(", ")" do
+        Please log in to vote

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  citizen_drop: 
+  user: 
+  approved: false
+
+two:
+  citizen_drop: 
+  user: 
+  approved: false

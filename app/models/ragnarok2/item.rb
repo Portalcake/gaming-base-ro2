@@ -35,7 +35,10 @@ module Ragnarok2
     has_many :quests, :through => :quest_item_rewards
 
     has_many :citizen_items, :dependent => :destroy
-    has_many :citizens, :through => :citizen_items
+    has_many :sellcitizens,
+            :through => :citizen_items,
+            :class_name => "Ragnarok2::Citizen",
+            :source => :citizen
 
     has_many :main_set_items,
             :foreign_key => :item_1_id,
@@ -72,9 +75,26 @@ module Ragnarok2
     default_scope includes(:jobs)
     has_many :jobs, :through=>:item_jobs
 
+    has_many :citizen_drops,
+            :dependent => :destroy
+    has_many :dropcitizens,
+            :through => :citizen_drops,
+            :class_name => "Ragnarok2::Citizen",
+            :source => :citizen
+
+    alias_method :drops, :citizen_drops
+
     before_save :update_icon_name, :update_required_joblist
 
     scope :default_order, order("ragnarok2_items.require_level ASC, ragnarok2_translations_item_names.translation ASC")
+
+    scope :search_by_name, lambda {|name|
+        where("ragnarok2_translations_item_names.translation LIKE ?", "%#{name}%")
+    }
+
+    def citizens
+        self.sellcitizens+self.dropcitizens
+    end
 
     def to_s
       "#{self.name}"

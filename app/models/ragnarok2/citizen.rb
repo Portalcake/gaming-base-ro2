@@ -32,9 +32,30 @@ module Ragnarok2
     after_save :update_function_information
 
     has_many :citizen_items, :dependent => :destroy
-    has_many :items, :through => :citizen_items
+    has_many :sellitems,
+            :through => :citizen_items,
+            :class_name => "Ragnarok2::Item",
+            :source => :item
+
+    has_many :citizen_drops,
+            :dependent => :destroy
+    has_many :dropitems,
+            :through => :citizen_drops,
+            :class_name => "Ragnarok2::Item",
+            :source => :item
+
+    alias_method :drops, :citizen_drops
+
 
     scope :default_order, order("ragnarok2_citizens.min_level ASC, ragnarok2_translations_citizen_names.translation ASC")
+
+    scope :search_by_name, lambda {|name|
+        where("ragnarok2_translations_citizen_names.translation LIKE ?", "%#{name}%")
+    }
+
+    def items
+        self.dropitems+self.sellitems
+    end
 
     def to_s
       "#{self.name}"

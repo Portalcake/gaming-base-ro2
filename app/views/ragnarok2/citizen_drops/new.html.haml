@@ -1,0 +1,22 @@
+%h2 Create drop-data
+.base_model= render @base_model
+
+= semantic_form_for @drop, :remote=>true, :url=>search_drops_path(:item_id=>params[:item_id], :citizen_id=>params[:citizen_id]), :html => { :class => "drop_search", :id => "drop_search" } do |f|
+  = label_tag(:q, "Search for:")
+  = text_field_tag(:q, params[:q], :placeholder => "Name")
+  = submit_tag("Search")
+
+= semantic_form_for @drop, :url=>drops_path(:item_id=>params[:item_id], :citizen_id=>params[:citizen_id]) do |f|
+  %h2 Entries to add
+  .search_results
+    - if @results
+      = render :partial => 'result', :collection=>@results
+      - if @results.size == 15
+        Results limited to 15 entries.
+    - else
+      Please search for items using the search bar above
+  = f.actions do
+    = f.action :submit, :label => "Add selected entries"
+    = f.action :cancel, :label => "Cancel"
+
+

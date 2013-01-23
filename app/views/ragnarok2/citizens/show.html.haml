@@ -35,11 +35,20 @@
         .quests
           = link_to quest, quest
 
-  - unless @citizen.items.empty?
+  - unless @citizen.sellitems.empty?
     .box
       %span.title Sells
-      - @citizen.items.default_order.each do |item|
+      - @citizen.sellitems.default_order.each do |item|
         .merchant
           = render item
+
+  .box
+    %span.title Drops
+    - if @citizen.drops.empty?
+      .drop Nothing
+    - else 
+      = render @citizen.drops
+    .drop_add
+      = link_to "» Add drops", new_drop_path(:citizen_id=>@citizen.id)
 
 = render "/share/development_box", :model => @citizen
