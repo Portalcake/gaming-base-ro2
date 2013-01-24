@@ -343,11 +343,11 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
-      ["Craft_ItemList.ct", "Ragnarok2::CraftInfo"], #before craft_material
-      ["Craft_Material.ct", "Ragnarok2::CraftMaterial"],
       #["DungeonMission.ct", ""],
       #["TokenName.ct", ""], #depricated?
       #["TokenFile.ct", ""], #depricated?
+      ["Craft_ItemList.ct", "Ragnarok2::CraftInfo"], #before craft_material
+      ["Craft_Material.ct", "Ragnarok2::CraftMaterial"],
       ["ItemCashInfo.ct", "Ragnarok2::ItemCashInfo"],
       ["KHARA_Title_Info.ct", "Ragnarok2::KharaTitle"],
       ["Khara_Info.ct", "Ragnarok2::Khara"],
@@ -370,7 +370,7 @@ namespace :ragnarok2 do
       ["DungeonInfo.ct", "Ragnarok2::Dungeon"],
       ["ItemBreakInfo.ct", "Ragnarok2::ItemBreakInfo"],
       ["BreakResult.ct", "Ragnarok2::ItemBreakResult"]
-    ][1..1].each do |file, class_name, opts|
+    ].each do |file, class_name, opts|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
 
