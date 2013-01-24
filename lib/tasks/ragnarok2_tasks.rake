@@ -255,6 +255,32 @@ namespace :ragnarok2 do
     m.map_column("Duration_Time", "duration_value")
     m.map_column("Cash_Icon", nil)
     m.map_column("DurationExtend_GroupID", "duration_extend_group_id")
+
+    m = DatabaseMapper.new("Ragnarok2::CraftMaterial", :partial=>true, :delete_all=>true)
+    m.loader = Proc.new {|entry, ientry|
+      0.upto(9) do |i|
+        mat_id = "materialid#{i}".to_sym
+        count_id = "count#{i}".to_sym
+        mat_id = "materialid#{i}".to_sym
+
+        next if entry[mat_id].to_i.zero? || entry[count_id].to_i.zero?
+        begin
+          mat = Ragnarok2::CraftMaterial.new
+          mat.craft_info_id = entry[:id]
+          mat.item = Ragnarok2::Item.find_by_item_id(entry[:craft_item_id])
+          mat.material = Ragnarok2::Item.find_by_item_id(entry[mat_id])
+          mat.amount = entry[count_id]
+          mat.save
+        rescue
+          false
+        end
+      end
+    }
+
+    m = DatabaseMapper.new("Ragnarok2::CraftInfo", :partial=>true, :find_by=>:craft_info_id)
+    m.map_column("ID", "craft_info_id")
+    m.map_column("Craft_ItemName", nil)
+    m.map_column("Craft_ItemNum", "craft_item_amount")
   end
 
 
@@ -317,6 +343,8 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
+      ["Craft_ItemList.ct", "Ragnarok2::CraftInfo"], #before craft_material
+      ["Craft_Material.ct", "Ragnarok2::CraftMaterial"],
       #["DungeonMission.ct", ""],
       #["TokenName.ct", ""], #depricated?
       #["TokenFile.ct", ""], #depricated?
@@ -342,7 +370,7 @@ namespace :ragnarok2 do
       ["DungeonInfo.ct", "Ragnarok2::Dungeon"],
       ["ItemBreakInfo.ct", "Ragnarok2::ItemBreakInfo"],
       ["BreakResult.ct", "Ragnarok2::ItemBreakResult"]
-    ].each do |file, class_name, opts|
+    ][1..1].each do |file, class_name, opts|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
 
@@ -357,7 +385,7 @@ namespace :ragnarok2 do
 
   desc "Search through ct files to find a value"
   task :search_ct => [:environment] do
-    search_value = "30000059"
+    search_value = "31400007"
     Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', "*.ct")).sort.each do |file|
 
       ext = FileExtractor_ct.new(file)

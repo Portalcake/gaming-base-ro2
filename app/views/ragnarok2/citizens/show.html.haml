@@ -47,7 +47,7 @@
     - if @citizen.drops.empty?
       .drop Nothing
     - else 
-      = render @citizen.drops
+      = render @citizen.drops.default_order
     .drop_add
       = link_to "» Add drops", new_drop_path(:citizen_id=>@citizen.id)
 

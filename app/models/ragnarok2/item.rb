@@ -82,6 +82,17 @@ module Ragnarok2
             :class_name => "Ragnarok2::Citizen",
             :source => :citizen
 
+    has_many :craft_infos,
+            :foreign_key => :craft_item_id,
+            :primary_key => :item_id
+
+    has_many :craft_materials,
+            :through => :craft_infos
+
+    has_many :craft_ingredients,
+            :class_name => "Ragnarok2::CraftMaterial",
+            :foreign_key => :material_id
+
     alias_method :drops, :citizen_drops
 
     before_save :update_icon_name, :update_required_joblist

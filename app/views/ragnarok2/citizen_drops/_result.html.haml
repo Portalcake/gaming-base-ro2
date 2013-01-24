@@ -1,5 +1,5 @@
 .search_result
   %table
     %tr
-      %td.search_checkbox= check_box_tag "result_#{result.id}"
+      %td.search_checkbox= check_box_tag "search_result[#{result.id}]"
       %td.search_partial= render result

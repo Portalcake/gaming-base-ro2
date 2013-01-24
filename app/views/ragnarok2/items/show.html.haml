@@ -62,13 +62,30 @@
           = link_to(citizen, citizen)
 
   .box
-    %span.title Drops from
+    %span.title Drops from / Gathered from
     - if @item.drops.empty?
       .drop Nothing
     - else 
-      = render @item.drops
+      = render @item.drops.default_order
     .drop_add
       = link_to "» Add monsters", new_drop_path(:item_id=>@item.id)
+
+
+  - unless @item.craft_infos.empty?
+    .box
+      %span.title Can be crafted by
+      .craft_infos
+        - @item.craft_infos.each do |craft_info|
+          =render craft_info
+
+  - unless @item.craft_infos.empty?
+    .box
+      %span.title Material for
+      - @item.craft_ingredients.each do |i|
+        .craft_ingredients
+          = link_to i.craft_info.item, i.craft_info.item
+          = surround "(", ")" do
+            = pluralize i.amount, "piece"
 
   - unless (@item.main_sets+@item.alternative_sets).empty?
     .box

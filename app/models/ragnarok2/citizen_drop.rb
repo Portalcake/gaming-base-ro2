@@ -3,6 +3,10 @@ module Ragnarok2
 
     belongs_to :item, :inverse_of => :citizen_drops
     belongs_to :citizen, :inverse_of => :citizen_drops
+
+    validates :item, :citizen, :presence => true
+
+    default_scope includes(:citizen_drop_users)
     has_many :citizen_drop_users,
           :dependent => :destroy
     has_many :users,
@@ -10,12 +14,9 @@ module Ragnarok2
 
     alias_method :votes, :citizen_drop_users
 
+    scope :default_order, order("approving_users_count DESC, disapproving_users_count ASC")
+
     def update_user_counter_cache!
-      puts "---------"
-      self.votes.each do |v|
-        p v
-      end
-      puts "---------"
       self.update_attributes(
         {:approving_users_count => self.votes.select{|v| v.approved?; v.approved?}.count,
         :disapproving_users_count => self.votes.select{|v| !v.approved?}.count},

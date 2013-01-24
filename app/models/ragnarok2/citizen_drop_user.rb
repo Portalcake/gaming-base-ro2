@@ -3,6 +3,11 @@ module Ragnarok2
     belongs_to :user
     belongs_to :citizen_drop, :inverse_of => :citizen_drop_users
 
+    validates :citizen_drop_id,
+            :uniqueness => {
+              :scope => :user_id
+            }
+
     after_save :update_counter_cache
     after_destroy :update_counter_cache
 

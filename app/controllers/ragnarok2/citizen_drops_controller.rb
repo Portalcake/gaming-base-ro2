@@ -23,11 +23,12 @@ module Ragnarok2
       if params[:citizen_id]
         @base_model = Citizen.find(params[:citizen_id])
         
-        params.each do |key, value|
-          if key.match(/^result_([1-9]\d*)$/)
-              drop = @base_model.drops.where(:item_id=>$1).first_or_create
+        params[:search_result].each do |key, value|
+          if value.to_i==1
+              drop = @base_model.drops.where(:item_id=>key).first_or_initialize
               unless drop.users.exists?(current_user)
                 drop.users << current_user
+                drop.save
               end
           end
         end
@@ -35,11 +36,13 @@ module Ragnarok2
       else
         @base_model = Item.find(params[:item_id])
 
-        params.each do |key, value|
-          if key.match(/^result_([1-9]\d*)$/)
-              drop = @base_model.drops.where(:citizen_id=>$1).first_or_create
+        params[:search_result].each do |key, value|
+          if value.to_i==1
+              drop = @base_model.drops.where(:citizen_id=>key).first_or_initialize
               unless drop.users.exists?(current_user)
                 drop.users << current_user
+                raise drop.errors.inspect unless drop.valid?
+                drop.save
               end
           end
         end
