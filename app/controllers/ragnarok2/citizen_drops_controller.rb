@@ -22,6 +22,8 @@ module Ragnarok2
       authorize!(:create, CitizenDrop)
       params[:search_result] = {} unless params[:search_result] && params[:search_result].kind_of?(Hash)
 
+      created = 0
+
       if params[:citizen_id]
         @base_model = Citizen.find(params[:citizen_id])
         
@@ -30,7 +32,7 @@ module Ragnarok2
               drop = @base_model.drops.where(:item_id=>key).first_or_initialize
               unless drop.users.exists?(current_user)
                 drop.users << current_user
-                drop.save
+                created += 1 if drop.save
               end
           end
         end
@@ -44,7 +46,7 @@ module Ragnarok2
               unless drop.users.exists?(current_user)
                 drop.users << current_user
                 raise drop.errors.inspect unless drop.valid?
-                drop.save
+                created += 1 if drop.save
               end
           end
         end
@@ -53,7 +55,7 @@ module Ragnarok2
 
       respond_to do |format|
         if @base_model.save
-          format.html { redirect_to @base_model, notice: 'Selected drops were successfully created.' }
+          format.html { redirect_to @base_model, notice: "#{created} selected #{"drop".pluralize(created)} were successfully created." }
         else
           format.html { render action: "new" }
         end
