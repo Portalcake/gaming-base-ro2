@@ -20,6 +20,8 @@ module Ragnarok2
 
     def create
       authorize!(:create, CitizenDrop)
+      params[:search_result] = [] unless params[:search_result] && params[:search_result].kind_of(Array)
+
       if params[:citizen_id]
         @base_model = Citizen.find(params[:citizen_id])
         
@@ -51,7 +53,7 @@ module Ragnarok2
 
       respond_to do |format|
         if @base_model.save
-          format.html { redirect_to @base_model, notice: 'Drops were successfully created.' }
+          format.html { redirect_to @base_model, notice: 'Selected drops were successfully created.' }
         else
           format.html { render action: "new" }
         end
