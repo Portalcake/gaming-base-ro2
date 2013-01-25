@@ -35,6 +35,10 @@
             - when 4
               - target = Ragnarok2::Item.find_by_item_id(task.complete_type_value1)
               Get #{task.complete_type_value2} #{link_to target.to_s.pluralize(task.complete_type_value2), target}
+            - when 6
+              - #value1 unknown.. use: 1
+              - target = Ragnarok2::Item.find_by_item_id(task.complete_type_value2)
+              Use #{task.complete_type_value3} #{link_to target, target}
             - when 14
               = pluralize(task.complete_type_value1, "Combat level")
               archived
