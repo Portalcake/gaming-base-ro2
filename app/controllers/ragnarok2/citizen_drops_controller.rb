@@ -55,7 +55,7 @@ module Ragnarok2
 
       respond_to do |format|
         if @base_model.save
-          format.html { redirect_to @base_model, notice: "#{created} selected #{"drop".pluralize(created)} were successfully created." }
+          format.html { redirect_to @base_model, notice: "#{created} selected #{"drop".pluralize(created)} successfully created." }
         else
           format.html { render action: "new" }
         end

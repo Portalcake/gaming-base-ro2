@@ -93,6 +93,20 @@ module Ragnarok2
             :class_name => "Ragnarok2::CraftMaterial",
             :foreign_key => :material_id
 
+    has_many :random_sets,
+            :primary_key => :randomset_id,
+            :foreign_key => :random_set_id,
+            :dependent => :destroy
+
+    has_many :random_set_items,
+            :through => :random_sets,
+            :source => :item
+
+    has_many :found_in_boxes,
+            :foreign_key => :item_id,
+            :primary_key => :item_id,
+            :class_name => "Ragnarok2::RandomSet"
+
     alias_method :drops, :citizen_drops
 
     before_save :update_icon_name, :update_required_joblist

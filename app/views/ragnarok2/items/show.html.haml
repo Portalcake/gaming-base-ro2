@@ -61,6 +61,23 @@
         .merchant
           = link_to(citizen, citizen)
 
+  - unless @item.random_sets.empty?
+    .box
+      %span.title Includes
+      = render @item.random_sets
+
+  - unless @item.found_in_boxes.empty?
+    .box
+      %span.title Included in
+      - @item.found_in_boxes.each do |box|
+        - box.boxes.each do |b|
+          .random_box
+            = link_to b, b
+            = surround "(", ")" do
+              Ratio:
+              = box.ratio.to_f/1000
+
+
   .box
     %span.title Drops from / Gathered from
     - if @item.drops.empty?

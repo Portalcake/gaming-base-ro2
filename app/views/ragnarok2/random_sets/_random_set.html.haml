@@ -1,0 +1,5 @@
+%div[random_set]
+  = link_to(random_set.hidden_item, random_set.hidden_item)
+  = surround "(", ")" do
+    Ratio:
+    = random_set.ratio.to_f/1000

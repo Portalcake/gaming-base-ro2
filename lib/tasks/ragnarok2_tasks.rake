@@ -281,6 +281,12 @@ namespace :ragnarok2 do
     m.map_column("ID", "craft_info_id")
     m.map_column("Craft_ItemName", nil)
     m.map_column("Craft_ItemNum", "craft_item_amount")
+
+
+    m = DatabaseMapper.new("Ragnarok2::RandomSet", :partial=>true, :delete_all=>true)
+    m.map_column("ID", "random_set_id")
+    m.map_column("Item", "item_id")
+    m.map_column("Name", nil)
   end
 
 
@@ -346,6 +352,7 @@ namespace :ragnarok2 do
       #["DungeonMission.ct", ""],
       #["TokenName.ct", ""], #depricated?
       #["TokenFile.ct", ""], #depricated?
+      ["RandomSet.ct", "Ragnarok2::RandomSet"],
       ["Craft_ItemList.ct", "Ragnarok2::CraftInfo"], #before craft_material
       ["Craft_Material.ct", "Ragnarok2::CraftMaterial"],
       ["ItemCashInfo.ct", "Ragnarok2::ItemCashInfo"],
@@ -385,7 +392,7 @@ namespace :ragnarok2 do
 
   desc "Search through ct files to find a value"
   task :search_ct => [:environment] do
-    search_value = "31400007"
+    search_value = "33000541"
     Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', "*.ct")).sort.each do |file|
 
       ext = FileExtractor_ct.new(file)
@@ -495,7 +502,7 @@ class DatabaseMapper
       #puts "#{entry}\n"
       unless @loader
         if !settings[:find_by]
-          e = @model_instance.create
+          e = @model_instance.new
         else 
           e = @model_instance.where(settings[:find_by]=>entry[settings[:find_by]]).first_or_initialize
         end
