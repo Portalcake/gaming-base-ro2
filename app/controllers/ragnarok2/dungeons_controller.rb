@@ -4,16 +4,17 @@ module Ragnarok2
   class DungeonsController < ApplicationController
 
     def index
-      if params[:q].nil? || params[:q].length.zero?
-        @dungeons = Dungeon.default_order.page(params[:page])
-      else
-        @dungeons = Dungeon.default_order.where("ragnarok2_dungeons.name LIKE ?", "%#{params[:q]}%").page(params[:page])
+      @dungeons = Dungeon
+      unless params[:q].nil? || params[:q].length.zero?
+        @dungeons = @dungeons.where("ragnarok2_dungeons.name LIKE ?", "%#{params[:q]}%")
       end
-      respond_with(@dungeons)
+      respond_with(@dungeons = @dungeons.default_order.group("dungeon_group_id").page(params[:page]))
     end
 
     def show
-      respond_with(@dungeon = Dungeon.find(params[:id]))
+      @dungeon = Dungeon.find(params[:id])
+      @dungeons = Dungeon.where(:dungeon_group_id=>@dungeon.dungeon_group_id).default_order
+      respond_with
     end
 
   end

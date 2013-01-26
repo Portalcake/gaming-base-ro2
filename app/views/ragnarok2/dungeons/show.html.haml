@@ -2,15 +2,17 @@
   .header
     %h2= @dungeon
 
-  .box
-    %span.title Details
-    .details
-      - @dungeon.maps.each do |map|
-        .detail Map: #{link_to map, map}
-      - unless @dungeon.map_min_level.zero?
-        .detail Level #{@dungeon.map_min_level} ~ #{@dungeon.map_max_level}
-      - if @dungeon.quest
-        .detail Required quest: #{link_to @dungeon.quest, @dungeon.quest}
-      .detail Basement: #{@dungeon.map_level}
+  - @dungeons.each do |dungeon|
+    .box
+      %span.title
+        = dungeon
+        Basement: #{dungeon.map_level}
+      .details
+        - dungeon.maps.each do |map|
+          .detail Map: #{link_to map, map}
+        - unless dungeon.map_min_level.zero?
+          .detail Level #{dungeon.map_min_level} ~ #{dungeon.map_max_level}
+        - if dungeon.quest
+          .detail Required quest: #{link_to dungeon.quest, dungeon.quest}
 
 = render "/share/development_box", :model => @dungeon

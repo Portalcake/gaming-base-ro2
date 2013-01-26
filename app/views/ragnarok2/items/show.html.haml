@@ -66,10 +66,11 @@
       %span.title Includes
       = render @item.random_sets
 
-  - unless @item.found_in_boxes.empty?
+  - boxes = @item.found_in_boxes.select {|box| !box.boxes.empty? }
+  - unless boxes.empty?
     .box
       %span.title Included in
-      - @item.found_in_boxes.each do |box|
+      - boxes.each do |box|
         - box.boxes.each do |b|
           .random_box
             = link_to b, b

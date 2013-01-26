@@ -1,5 +1,2 @@
 .dungeon[dungeon]{:class=>[:dungeon, :model_listing, cycle("odd", "even")]}
   = link_to dungeon.name, dungeon
-  [#{dungeon.map_level} Basement]
-  - unless dungeon.map_min_level.zero?
-    (Level #{dungeon.map_min_level} ~ #{dungeon.map_max_level})

@@ -4,12 +4,11 @@ module Ragnarok2
   class MapsController < ApplicationController
 
     def index
-      if params[:q].nil? || params[:q].length.zero?
-        @maps = Map.default_order.page(params[:page])
-      else
-        @maps = Map.default_order.where("ragnarok2_maps.name LIKE ?", "%#{params[:q]}%").page(params[:page])
+      @maps = Map
+      unless params[:q].nil? || params[:q].length.zero?
+        @maps = @maps.where("ragnarok2_maps.name LIKE ?", "%#{params[:q]}%")
       end
-      respond_with(@maps)
+      respond_with(@maps = @maps.default_order.page(params[:page]))
     end
 
     def show

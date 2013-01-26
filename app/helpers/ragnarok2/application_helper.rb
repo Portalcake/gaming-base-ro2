@@ -54,7 +54,7 @@ module Ragnarok2::ApplicationHelper
         skill_group.item :skills_learnable, "Learnable skills", skill_groups_path(:learnable=>1)
         skill_group.item :skills_learnable, "Monster skills", skill_groups_path(:learnable=>0)
       end
-      #primary.item :exp_overview, "EXP Table", exp_overview_path
+      primary.item :exp_overview, "EXP Table", exp_overview_path
 
     end
   end
