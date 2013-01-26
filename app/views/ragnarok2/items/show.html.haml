@@ -95,7 +95,7 @@
         - @item.craft_infos.each do |craft_info|
           =render craft_info
 
-  - unless @item.craft_infos.empty?
+  - unless @item.craft_ingredients.empty?
     .box
       %span.title Material for
       - @item.craft_ingredients.each do |i|
