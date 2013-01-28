@@ -1,6 +1,4 @@
 namespace :ragnarok2 do
-  require 'RMagick'
-  include Magick
 
   RAGNAROK2_ASSETS_DIR = {
     :icons => Rails.root.join('public', 'games', 'ro2', 'icons'),
@@ -431,6 +429,7 @@ namespace :ragnarok2 do
       dds_to_png(dds, RAGNAROK2_ASSETS_DIR[:maps])
       print "> Done #{index+1}/#{dds_files.count}\r"
     end
+    puts
   end
 
   desc "Reads and converts all *.dss files"
@@ -443,7 +442,8 @@ def dds_to_png(src, dest)
   FileUtils.mkdir_p(dest) #create directory if not present
   begin
     name = File.basename(src, ".dds")
-    icon = Image.read(src).first
+    icon = MiniMagick::Image.open(src)
+    icon.format "png"
     icon.write("#{dest}/#{name.downcase}.png")
     true
   rescue
