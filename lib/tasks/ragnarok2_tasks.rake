@@ -102,9 +102,9 @@ namespace :ragnarok2 do
     m.map_column("ID", "item_id")
     m.map_column("Name", "name_fallback")
     m.map_column("Default_Color", nil)
-    m.map_column("high_category", "high_category_id")
-    m.map_column("medium_category", "medium_category_id")
-    m.map_column("low_category", "low_category_id")
+    m.map_column("High_Category", "high_category_id")
+    m.map_column("Medium_Category", "medium_category_id")
+    m.map_column("Low_Category", "low_category_id")
 
     m = DatabaseMapper.new("Ragnarok2::ProJob", :partial=>true, :find_by=>:pro_job_id)
     m.map_column("ID", "pro_job_id")
