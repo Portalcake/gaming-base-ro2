@@ -1,5 +1,7 @@
 %div[random_set]
   = link_to(random_set.hidden_item, random_set.hidden_item)
   = surround "(", ")" do
-    Ratio:
-    = random_set.ratio.to_f/1000
+    = pluralize random_set.package, "piece"
+  - if random_set.setbox_type.zero?
+    = surround "(", ")" do
+      random
