@@ -1,8 +1,8 @@
 .model_details.map
-  .minimap= ragnarok2_minimap_image_tag(@map)
   %h2= @map
 
   .box.details
+    .minimap= ragnarok2_minimap_image_tag(@map)
     %span.title Details
     .attributes
       .attributes= booleanize_string("PK", !@map.is_pk.zero?)
