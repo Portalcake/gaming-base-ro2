@@ -3,7 +3,7 @@
 
   .box.details
     .minimap= ragnarok2_minimap_image_tag(@map)
-    %span.title Details
+    .title Details
     .attributes
       .attributes= booleanize_string("PK", !@map.is_pk.zero?)
       .attributes= booleanize_string("Mount", !@map.is_mount.zero?)
@@ -11,12 +11,12 @@
       .attributes= booleanize_string("Attack", !@map.is_pk.zero?)
 
   .box.quests
-    %span.title Quests
+    .title Quests
     .quests
       = (render @map.quests.default_order) || "None"
 
   .box
-    %span.title Dungeons
+    .title Dungeons
     .dungeons
       = (render @map.dungeons) || "None"
 

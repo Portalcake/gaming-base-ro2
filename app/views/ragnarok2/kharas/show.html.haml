@@ -3,7 +3,7 @@
 
 
   .box
-    %span.title Requirements
+    .title Requirements
     .requirement= booleanize_string("Auto challenge", !@khara.auto_challenge.zero?)
     .requirement Level #{@khara.min_base_level} ~ #{@khara.max_base_level}
     - unless @khara.min_projob_level.zero?
@@ -22,7 +22,7 @@
         = render "share/missing_information"
 
   .box
-    %span.title Tasks
+    .title Tasks
     .tasks
       - unless @khara.limit_time.zero?
         .task Timelimit #{@khara.limit_time}
@@ -82,7 +82,7 @@
             = render "share/missing_information"
 
   .box
-    %span.title Rewards
+    .title Rewards
     .reward= booleanize_string("Automatic reward", !@khara.reward_auto.zero?)
     - if @khara.citizen
       .reward Rewards given by #{@khara.citizen}

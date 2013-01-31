@@ -4,7 +4,7 @@
     %h2= @item_set
 
   .box
-    %span.title Parts
+    .title Parts
     .set_items
       - @item_set.set_items.each do |set_item|
         .set_item
@@ -14,7 +14,7 @@
             = link_to set_item.alternative_item, set_item.alternative_item
 
   .box
-    %span.title Properties
+    .title Properties
     .error
       Those values have not been verified yet and need to be recalculated (e.g. devided by 10 to get percents or something similiar).
       = link_to "Please help us.", main_app.missing_information_path

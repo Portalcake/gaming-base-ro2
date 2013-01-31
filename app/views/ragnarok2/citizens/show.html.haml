@@ -4,7 +4,7 @@
   .twin_boxes
     .box_left
       .box
-        %span.title Details
+        .title Details
         .attribute #{@citizen.job_name}
         .attribute Level #{@citizen.min_level} ~ #{@citizen.max_level}
         .attribute EXP #{@citizen.exp.join(" ~ ")}
@@ -15,37 +15,37 @@
 
       - unless @citizen.start_quests.empty?
         .box
-          %span.title Quests
+          .title Quests
           - @citizen.start_quests.each do |quest|
             .quests
               = link_to quest, quest
 
       - unless @citizen.sellitems.empty?
         .box
-          %span.title Sells
+          .title Sells
           - @citizen.sellitems.default_order.each do |item|
             .merchant
               = link_to item, item
 
       .box
-        %span.title Drops
+        .tools
+          = link_to "» Add drops", new_drop_path(:citizen_id=>@citizen.id)
+        .title Drops
         - if @citizen.drops.empty?
           .drop Nothing
         - else 
           = render @citizen.drops.default_order
-        .drop_add
-          = link_to "» Add drops", new_drop_path(:citizen_id=>@citizen.id)
 
     .box_right
       - unless @citizen.resistances.empty?
         .box
-          %span.title Element resistance
+          .title Element resistance
           - @citizen.resistances.each do |resistance, value|
             .resistance
               #{resistance} #{human_element_resistance(value)}
 
       .box
-        %span.title Miscellaneous
+        .title Miscellaneous
         .attribute Attack range #{@citizen.attack_range}
         .attribute Attack execution time #{@citizen.attack_execution_time}
         .attribute Attack cooldown #{@citizen.attack_cooldown_time}

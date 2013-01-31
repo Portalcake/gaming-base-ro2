@@ -35,7 +35,7 @@
           = @quest.max_khara_point
 
       .box
-        %span.title Where to find
+        .title Where to find
         .map
           Area:
           = link_to @quest.map, @quest.map
@@ -51,12 +51,12 @@
 
       - if @quest.quest_info
         .box
-          %span.title Tasks
+          .title Tasks
           .tasks
             = render @quest.quest_info
 
       .box
-        %span.title Rewards
+        .title Rewards
         .rewards
           .reward #{@quest.reward_exp} EXP
           - unless @quest.reward_projob_exp.zero?
@@ -69,7 +69,7 @@
 
     .box_right
       .box
-        %span.title Characteristics
+        .title Characteristics
         .attributes
           .attributes= booleanize_string("Daily quest", !@quest.daily_quest.zero?)
           .attributes= booleanize_string("Abondable", !@quest.giveup.zero?)
@@ -80,7 +80,7 @@
 
   - unless Rails.env.production?
     .box
-      %span.title Quest texts
+      .title Quest texts
       .quest_texts
         - [:summary_text, :start_text, :start_demand, :retry_text, :finish_text, :finish_demand].each do |ktext|
           - text = @quest.translation.send(ktext)

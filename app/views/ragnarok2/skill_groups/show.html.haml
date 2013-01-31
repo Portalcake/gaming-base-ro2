@@ -6,7 +6,7 @@
       .description= @skillgroup.skills.first.description
 
   .box
-    %span.title General properties
+    .title General properties
     .properties
       - unless @skillgroup.required_skills.empty?
         - @skillgroup.required_skills.each do |s|

@@ -12,13 +12,13 @@
     .box_left
       .box
         - unless (@item.main_sets+@item.alternative_sets).empty?
-          %span.title Part of
+          .title Part of
           - (@item.main_sets+@item.alternative_sets).each do |set|
             .item_set
               = link_to set, set
           %br
 
-        %span.title Requirements
+        .title Requirements
         .requirements
           - unless @item.require_level.zero?
             .requirement Level: #{@item.require_level}
@@ -29,7 +29,7 @@
           - if @item.require_level.zero? && @item.require_sex.zero? && @item.jobs.empty?
             .requirement None
       .box
-        %span.title Properties
+        .title Properties
         - if @item.cash_shop_info
           .property
             %span.cashshop CashShop-Item
@@ -58,12 +58,12 @@
 
       - @item.craft_infos.each do |craft_info|
         .box
-          %span.title Can be crafted by
+          .title Can be crafted by
           .craft_infos=render craft_info
 
       - unless @item.craft_ingredients.empty?
         .box
-          %span.title Material for
+          .title Material for
           - @item.craft_ingredients.each do |i|
             .craft_ingredients
               = link_to i.craft_info.item, i.craft_info.item
@@ -73,7 +73,7 @@
     .box_right
       - unless @item.quest_item_rewards.empty?
         .box
-          %span.title Given as quest reward
+          .title Given as quest reward
           - @item.quest_item_rewards.each do |reward|
             .questreward
               = link_to(reward.quest, reward.quest)
@@ -81,20 +81,20 @@
 
       - unless @item.sellcitizens.empty?
         .box
-          %span.title Buyable at
+          .title Buyable at
           - @item.sellcitizens.default_order.each do |citizen|
             .merchant
               = link_to(citizen, citizen)
 
       - unless @item.random_sets.empty?
         .box
-          %span.title Includes
+          .title Includes
           = render @item.random_sets
 
       - boxes = @item.found_in_boxes.select {|box| !box.boxes.empty? }
       - unless boxes.empty?
         .box
-          %span.title Included in
+          .title Included in
           - boxes.each do |box|
             - box.boxes.each do |b|
               .random_box
@@ -108,7 +108,7 @@
       .box
         .tools
           = link_to "» Add monsters", new_drop_path(:item_id=>@item.id) 
-        %span.title Drops from / Gathered from
+        .title Drops from / Gathered from
         - if @item.drops.empty?
           .drop Nothing
         - else 
@@ -116,7 +116,7 @@
 
   - unless @item.item_break_results.empty?
     .box
-      %span.title Breaks into
+      .title Breaks into
       .break_results
         - @item.item_break_results.each do |break_result|
           = render break_result

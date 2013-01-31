@@ -1,6 +1,6 @@
 .skill[skill]
   .box
-    %span.title.name= "#{skill.name} (Level #{skill.skill_level})"
+    .title.name= "#{skill.name} (Level #{skill.skill_level})"
     .skill_description= skill.description
     .requirements
       - unless skill.use_sp.zero?
