@@ -280,11 +280,14 @@ namespace :ragnarok2 do
     m.map_column("Craft_ItemName", nil)
     m.map_column("Craft_ItemNum", "craft_item_amount")
 
-
     m = DatabaseMapper.new("Ragnarok2::RandomSet", :partial=>true, :delete_all=>true)
     m.map_column("ID", "random_set_id")
     m.map_column("Item", "item_id")
     m.map_column("Name", nil)
+
+    m = DatabaseMapper.new("Ragnarok2::DungeonQuest", :partial=>true, :find_by=>:quest_id)
+    m.map_column("MissionID", "quest_id")
+    m.map_column("DungeonID", "dungeon_id")
   end
 
 
@@ -347,9 +350,9 @@ namespace :ragnarok2 do
   task :ct => [:load_mappers, :environment] do
 
     [
-      #["DungeonMission.ct", ""],
       #["TokenName.ct", ""], #depricated?
       #["TokenFile.ct", ""], #depricated?
+      ["DungeonMission.ct", "Ragnarok2::DungeonQuest"],
       ["RandomSet.ct", "Ragnarok2::RandomSet"],
       ["Craft_ItemList.ct", "Ragnarok2::CraftInfo"], #before craft_material
       ["Craft_Material.ct", "Ragnarok2::CraftMaterial"],

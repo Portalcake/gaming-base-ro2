@@ -3,16 +3,38 @@
     %h2= @dungeon
 
   - @dungeons.each do |dungeon|
-    .box
-      .title
-        = dungeon
-        Basement: #{dungeon.map_level}
-      .details
-        - dungeon.maps.each do |map|
-          .detail Map: #{link_to map, map}
-        - unless dungeon.map_min_level.zero?
-          .detail Level #{dungeon.map_min_level} ~ #{dungeon.map_max_level}
-        - if dungeon.quest
-          .detail Required quest: #{link_to dungeon.quest, dungeon.quest}
+    .twin_boxes
+      .box_left.box
+        .title
+          = dungeon
+          Basement: #{dungeon.map_level}
+        .details
+          - dungeon.maps.each do |map|
+            .detail Map: #{link_to map, map}
+          - unless dungeon.map_min_level.zero?
+            .detail Level #{dungeon.map_min_level} ~ #{dungeon.map_max_level}
+          - if dungeon.quest
+            .detail Required quest: #{link_to dungeon.quest, dungeon.quest}
+
+      .box_right
+        - dungeon.dungeon_quests.each do |dungeon_quest|
+          .box
+            .title
+              Quest: #{dungeon_quest}
+            - 1.upto 5 do |i|
+              .task
+                - case dungeon_quest.send("missiontype#{i}")
+                  - when 0
+                    - ""
+                  - when 1
+                    - target = Ragnarok2::Citizen.find_by_citizen_id(dungeon_quest.send("missionvalue#{i}"))
+                    - if target
+                      Kill #{link_to target, target}
+                  - else
+                    = render "share/missing_information"
+        - if dungeon.dungeon_quests.empty?
+          .box
+            .title Quests
+            None
 
 = render "/share/development_box", :model => @dungeon

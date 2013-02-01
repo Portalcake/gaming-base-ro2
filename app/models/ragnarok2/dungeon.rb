@@ -7,6 +7,8 @@ module Ragnarok2
 
     has_many :map_dungeons, :dependent => :destroy
     has_many :maps, :through => :map_dungeons
+    has_many :dungeon_quests,
+        :dependent => :destroy
     belongs_to :quest
 
     scope :default_order, order("ragnarok2_dungeons.name ASC, ragnarok2_dungeons.map_level ASC")

@@ -7,7 +7,7 @@
         .title Details
         .attribute #{@citizen.job_name}
         .attribute Level #{@citizen.min_level} ~ #{@citizen.max_level}
-        .attribute EXP #{@citizen.exp.join(" ~ ")}
+        .attribute EXP #{@citizen.exp.empty? ? "?" : @citizen.exp.join(" ~ ")}
         .attribute Element #{human_element(@citizen.element)}
         .attribute Race #{human_race(@citizen.race)}
         .attribute Base EXP multiplier #{@citizen.base_exp_multiplier}
