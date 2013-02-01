@@ -4,16 +4,6 @@
     %h2= @item_set
 
   .box
-    .title Parts
-    .set_items
-      - @item_set.set_items.each do |set_item|
-        .set_item
-          = link_to set_item.main_item, set_item.main_item
-          - if set_item.alternative_item
-            or 
-            = link_to set_item.alternative_item, set_item.alternative_item
-
-  .box
     .title Properties
     .error
       Those values have not been verified yet and need to be recalculated (e.g. devided by 10 to get percents or something similiar).
@@ -23,5 +13,15 @@
         None
       - @item_set.traits.each do |trait|
         .property= render trait
+
+  - @item_set.set_items.each do |set_item|
+    .twin_boxes
+      .box_left.box
+        .title Main part
+        = render set_item.main_item
+      - if set_item.alternative_item
+        .box_right.box
+          .title Alternative part
+          = render set_item.alternative_item
         
 = render "/share/development_box", :model => @item_set

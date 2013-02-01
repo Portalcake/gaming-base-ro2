@@ -7,7 +7,7 @@ module Ragnarok2::ApplicationHelper
       primary.item :quests, "Quests", quests_path, :highlights_on=>/ro2\/[a-z]{2}\/quests/
       primary.item :khara, "Khara", kharas_path, :highlights_on=>/ro2\/[a-z]{2}\/kharas/
       primary.item :cititzens, "NPCs", citizens_path, :highlights_on=>/ro2\/[a-z]{2}\/citizens/
-      primary.item :items, "Items", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items/ do |i|
+      primary.item :items, "Items & Sets", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items/ do |i|
         i.item :items, "All items", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items\/?$/
         i.item :placeholder_items, "", :class => :placeholder
 
@@ -44,10 +44,15 @@ module Ragnarok2::ApplicationHelper
 
         end
 
+        i.item :placeholder_itemsets, "", :class => :placeholder
+        i.item :set_items, "Item Sets", item_sets_path, :highlights_on=>/ro2\/[a-z]{2}\/item_sets/
+
       end
-      primary.item :set_items, "Item Sets", item_sets_path, :highlights_on=>/ro2\/[a-z]{2}\/item_sets/
-      primary.item :maps, "Maps", maps_path, :highlights_on=>/ro2\/[a-z]{2}\/maps/
-      primary.item :dungeons, "Dungeons", dungeons_path, :highlights_on=>/ro2\/[a-z]{2}\/dungeons/
+
+      primary.item :maps, "Maps & Dungeons", maps_path, :highlights_on=>/ro2\/[a-z]{2}\/maps/ do |md|
+        md.item :maps, "Maps", maps_path, :highlights_on=>/ro2\/[a-z]{2}\/maps/
+        md.item :dungeons, "Dungeons", dungeons_path, :highlights_on=>/ro2\/[a-z]{2}\/dungeons/
+      end
       primary.item :skills, "Skills", skill_groups_path(:learnable=>1), :highlights_on=>/ro2\/[a-z]{2}\/skills/ do |skill_group|
         skill_group.item :skills_learnable, "All skills", skill_groups_path, :highlights_on=>/ro2\/[a-z]{2}\/skills\/?$/
         skill_group.item :placeholder_skills, "", :class => :placeholder
