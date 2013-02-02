@@ -107,6 +107,16 @@ module Ragnarok2
             :primary_key => :item_id,
             :class_name => "Ragnarok2::RandomSet"
 
+
+    has_many :craft_scrolls,
+            :primary_key => :item_id,
+            :foreign_key => :item_id,
+            :dependent => :destroy
+
+    has_many :craft_info_scrolls,
+            :through => :craft_scrolls,
+            :source => :craft_info
+
     alias_method :drops, :citizen_drops
 
     before_save :update_icon_name, :update_required_joblist

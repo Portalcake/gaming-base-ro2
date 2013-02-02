@@ -1,0 +1,12 @@
+.ragnarok2_craft_info .materials {
+  padding-bottom:5px;
+  overflow: auto;
+  .material {
+    overflow: auto;
+    .material_icon img {
+      padding-right: 5px;
+      float:left;
+      width:30px;
+    }
+  }
+}

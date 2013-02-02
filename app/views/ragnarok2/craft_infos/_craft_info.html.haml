@@ -1,18 +1,27 @@
-%div[craft_info]
-  .requirements Amount #{craft_info.craft_item_amount}
-  .requirements Craft-Level #{craft_info.craft_level}
-  - unless craft_info.craft_needsp.zero?
-    .requirements SP #{craft_info.craft_needsp}
-  - unless craft_info.craftexp.zero?
-    .requirements EXP #{craft_info.craftexp}
-  - unless craft_info.crafttime_sec.zero?
-    .requirements Crafting time #{pluralize craft_info.crafttime_sec, "second"}
-  - unless craft_info.cooltime_min.zero?
-    .requirements Cooltime #{pluralize craft_info.cooltime_min, "minute"}
-  - unless craft_info.learn_needmoney.zero?
-    .requirements Money to learn #{pluralize craft_info.learn_needmoney, "Rupee"}
-  .materials
-    - craft_info.materials.each do |material|
-      .material
-        = material.amount
-        = link_to material.material.to_s.pluralize(material.amount), material.material
+.twin_boxes[craft_info]
+  .box_left
+    .requirements
+      Result
+      = link_to craft_info.item, craft_info.item
+      = surround "(", ")" do 
+        = pluralize craft_info.craft_item_amount, "piece"
+    .requirements Craft-Level #{craft_info.craft_level}
+    - unless craft_info.craft_needsp.zero?
+      .requirements SP #{craft_info.craft_needsp}
+    - unless craft_info.craftexp.zero?
+      .requirements EXP #{craft_info.craftexp}
+    - unless craft_info.crafttime_sec.zero?
+      .requirements Crafting time #{pluralize craft_info.crafttime_sec, "second"}
+    - unless craft_info.cooltime_min.zero?
+      .requirements Cooltime #{pluralize craft_info.cooltime_min, "minute"}
+    - unless craft_info.learn_needmoney.zero?
+      .requirements Money to learn #{pluralize craft_info.learn_needmoney, "Rupee"}
+    .requirements Scroll #{link_to craft_info.craft_scroll_item, craft_info.craft_scroll_item}
+
+  .box_right
+    .materials
+      - craft_info.materials.each do |material|
+        .material
+          .material_icon= ragnarok2_icon_image_tag(material.material.icon, :alt=>"")
+          = material.amount
+          = link_to material.material.to_s.pluralize(material.amount), material.material

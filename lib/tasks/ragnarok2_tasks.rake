@@ -288,6 +288,11 @@ namespace :ragnarok2 do
     m = DatabaseMapper.new("Ragnarok2::DungeonQuest", :partial=>true, :find_by=>:quest_id)
     m.map_column("MissionID", "quest_id")
     m.map_column("DungeonID", "dungeon_id")
+
+    m = DatabaseMapper.new("Ragnarok2::CraftScroll", :partial=>false, :delete_all=>true)
+    m.map_column("ID", "item_id")
+    m.map_column("Name", nil)
+    m.map_column("Craft_ID", "craft_info_id")
   end
 
 
@@ -352,6 +357,10 @@ namespace :ragnarok2 do
     [
       #["TokenName.ct", ""], #depricated?
       #["TokenFile.ct", ""], #depricated?
+      #-["Craft_ItemType.ct", ""],
+      #-["Craft_NPC.ct", ""],
+      #-["Craft_ProJobType.ct", ""],
+      ["CraftScroll.ct", "Ragnarok2::CraftScroll"],
       ["DungeonMission.ct", "Ragnarok2::DungeonQuest"],
       ["RandomSet.ct", "Ragnarok2::RandomSet"],
       ["Craft_ItemList.ct", "Ragnarok2::CraftInfo"], #before craft_material

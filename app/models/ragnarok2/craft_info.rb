@@ -11,6 +11,15 @@ module Ragnarok2
           :primary_key => :item_id,
           :inverse_of => :craft_infos
 
+    has_one :craft_scroll,
+          :primary_key => :craft_info_id,
+          :dependent => :destroy
+
+    default_scope includes(:craft_scroll_item)
+    has_one :craft_scroll_item,
+          :through => :craft_scroll,
+          :source => :item
+
     alias_method :materials, :craft_materials
   end
 end
