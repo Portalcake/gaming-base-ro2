@@ -14,5 +14,5 @@
       %span.cashshop CashShop-Item
       = surround '(', ')' do
         = human_cash_shop_duration(item.cash_shop_info)
-  - unless item.socket_max.zero?
-    .attribute= pluralize(item.socket_max, "Socket")
+  - unless item.sockets.empty?
+    .attribute= pluralize(item.sockets.count, "Socket")

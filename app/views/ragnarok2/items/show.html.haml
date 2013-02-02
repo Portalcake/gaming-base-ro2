@@ -34,8 +34,8 @@
           .box_left
             - unless @item.price_buy.zero?
               .attribute Price #{@item.price_buy} (buy), #{(@item.price_buy/10.0).ceil} (sell)
-            - unless @item.socket_max.zero?
-              .property= pluralize(@item.socket_max, "Socket")
+            - unless @item.sockets.empty?
+              .property= pluralize(@item.sockets.count, "Socket")
             .attribute #{@item.stack_max} pieces stackable
             .attribute Durability #{human_item_durability(@item.durability)}
             .attribute= booleanize_string("Droppable", @item.is_drop)

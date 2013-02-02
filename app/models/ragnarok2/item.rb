@@ -117,6 +117,10 @@ module Ragnarok2
             :through => :craft_scrolls,
             :source => :craft_info
 
+    has_one :item_socket_group,
+            :foreign_key => :socket_group_id,
+            :primary_key => :socket_groupid
+
     alias_method :drops, :citizen_drops
 
     before_save :update_icon_name, :update_required_joblist
@@ -152,6 +156,10 @@ module Ragnarok2
         end
 
         [high_category, medium_category, low_category].compact
+    end
+
+    def sockets
+        item_socket_group && item_socket_group.sockets || []
     end
 
     private 

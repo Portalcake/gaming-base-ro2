@@ -293,6 +293,9 @@ namespace :ragnarok2 do
     m.map_column("ID", "item_id")
     m.map_column("Name", nil)
     m.map_column("Craft_ID", "craft_info_id")
+
+    m = DatabaseMapper.new("Ragnarok2::ItemSocketGroup", :partial=>true, :find_by=>:socket_group_id)
+    m.map_column("SocketGroupID", "socket_group_id")
   end
 
 
@@ -368,6 +371,7 @@ namespace :ragnarok2 do
       #-["Craft_NPC.ct", ""],
       #-["Craft_ProJobType.ct", ""],
       #
+      ["ItemSocketGroup.ct", "Ragnarok2::ItemSocketGroup"],
       ["CraftScroll.ct", "Ragnarok2::CraftScroll"],
       ["DungeonMission.ct", "Ragnarok2::DungeonQuest"],
       ["RandomSet.ct", "Ragnarok2::RandomSet"],
@@ -397,7 +401,7 @@ namespace :ragnarok2 do
       ["BreakResult.ct", "Ragnarok2::ItemBreakResult"]
     ].each do |file, class_name, opts|
 
-      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
+      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file), :debug=>true)
 
       mapper = DatabaseMapper.find(
         :header => file.header,
