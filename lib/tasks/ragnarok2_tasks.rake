@@ -357,9 +357,17 @@ namespace :ragnarok2 do
     [
       #["TokenName.ct", ""], #depricated?
       #["TokenFile.ct", ""], #depricated?
+      #
+      #-["CardCompose.ct", ""],
+      #-["CardEnforce.ct", ""],
+      #-["CardEnforceInfo.ct", ""],
+      #-["CardInfo.ct", ""],
+      #-["CardMaterial.ct", ""],
+      #
       #-["Craft_ItemType.ct", ""],
       #-["Craft_NPC.ct", ""],
       #-["Craft_ProJobType.ct", ""],
+      #
       ["CraftScroll.ct", "Ragnarok2::CraftScroll"],
       ["DungeonMission.ct", "Ragnarok2::DungeonQuest"],
       ["RandomSet.ct", "Ragnarok2::RandomSet"],
@@ -510,32 +518,46 @@ class DatabaseMapper
 
     @model_instance.delete_all if settings[:delete_all] && @model_instance
     @before_load.call if @before_load
-    hashed_datasets.each_with_index do |entry, ientry|
-      #puts "#{entry}\n"
-      unless @loader
-        if !settings[:find_by]
-          e = @model_instance.new
-        else 
-          e = @model_instance.where(settings[:find_by]=>entry[settings[:find_by]]).first_or_initialize
-        end
-        
-        if !e.update_attributes(entry, :without_protection => true)
-          ignored += 1
-          e.destroy unless e.new_record?
-          if settings[:show_invalids]
-            p entry
-            puts
-          end
-        elsif settings[:find_by]==:id
-          #cruel workaround to set ID manually
-          @model_instance.update_all("id = #{entry[:id]}", "id = #{e.id}")
-        end
-      else
-        ignored += 1 unless @loader.call(entry, ientry)
+
+    #use a more efficient way to import if we purged the table first
+    if settings[:delete_all] && !@loader
+      import_list = []
+      hashed_datasets.each do |entry|
+        n = @model_instance.new
+        n.assign_attributes(entry, :without_protection => true)
+        import_list << n
       end
-      print "> Done #{ientry+1}/#{hashed_datasets.count} (#{ignored} invalid)\r"
+      print "> Mass-import #{import_list.length} entries..."
+      @model_instance.import import_list
+      puts " Done"
+    else 
+      hashed_datasets.each_with_index do |entry, ientry|
+        #puts "#{entry}\n"
+        unless @loader
+          if !settings[:find_by]
+            e = @model_instance.new
+          else 
+            e = @model_instance.where(settings[:find_by]=>entry[settings[:find_by]]).first_or_initialize
+          end
+          
+          if !e.update_attributes(entry, :without_protection => true)
+            ignored += 1
+            e.destroy unless e.new_record?
+            if settings[:show_invalids]
+              p entry
+              puts
+            end
+          elsif settings[:find_by]==:id
+            #cruel workaround to set ID manually
+            @model_instance.update_all("id = #{entry[:id]}", "id = #{e.id}")
+          end
+        else
+          ignored += 1 unless @loader.call(entry, ientry)
+        end
+        print "> Done #{ientry+1}/#{hashed_datasets.count} (#{ignored} invalid)\r"
+      end
+      puts
     end
-    puts
     @after_load.call if @after_load
   end
 

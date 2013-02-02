@@ -102,7 +102,7 @@
           .title Includes
           .twin_boxes
             - @item.random_sets.each do |item|
-              %div{:class=>cycle("box_left", "box_right")}
+              %div{:class=>cycle("box_left", "box_right", :name => "random_sets_boxes_includes")}
                 = render item
 
       - boxes = @item.found_in_boxes.select {|box| !box.boxes.empty? }
@@ -112,7 +112,7 @@
           .twin_boxes
             - boxes.each do |box|
               - box.boxes.each do |b|
-                .ragnarok2_random_set{:class=>cycle("box_left", "box_right")}
+                .ragnarok2_random_set{:class=>cycle("box_left", "box_right", :name => "random_sets_boxes_included")}
                   .random_set_icon= ragnarok2_icon_image_tag(b.icon, :alt=>"")
                   .name
                     = link_to b, b
