@@ -1,7 +1,12 @@
 %div[random_set]
-  = link_to(random_set.hidden_item, random_set.hidden_item)
-  = surround "(", ")" do
+  .random_set_icon= ragnarok2_icon_image_tag(random_set.hidden_item.icon, :alt=>"")
+  .name
+    = link_to(random_set.hidden_item, random_set.hidden_item)
+    - if random_set.setbox_type.zero?
+      = surround "(", ")" do
+        random
+  .description
     = pluralize random_set.package, "piece"
-  - if random_set.setbox_type.zero?
-    = surround "(", ")" do
-      random
+    - if random_set.setbox_type.zero?
+      = surround "(", ")" do
+        #{random_set.ratio.to_f/1000}%

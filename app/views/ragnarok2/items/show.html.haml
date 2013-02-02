@@ -100,21 +100,30 @@
       - unless @item.random_sets.empty?
         .box
           .title Includes
-          = render @item.random_sets
+          .twin_boxes
+            - @item.random_sets.each do |item|
+              %div{:class=>cycle("box_left", "box_right")}
+                = render item
 
       - boxes = @item.found_in_boxes.select {|box| !box.boxes.empty? }
       - unless boxes.empty?
         .box
           .title Included in
-          - boxes.each do |box|
-            - box.boxes.each do |b|
-              .random_box
-                = link_to b, b
-                = surround "(", ")" do
-                  = pluralize box.package, "piece"
-                - if box.setbox_type.zero?
-                  = surround "(", ")" do
-                    random
+          .twin_boxes
+            - boxes.each do |box|
+              - box.boxes.each do |b|
+                .ragnarok2_random_set{:class=>cycle("box_left", "box_right")}
+                  .random_set_icon= ragnarok2_icon_image_tag(b.icon, :alt=>"")
+                  .name
+                    = link_to b, b
+                    - if box.setbox_type.zero?
+                      = surround "(", ")" do
+                        random
+                  .description
+                    = pluralize box.package, "piece"
+                    - if box.setbox_type.zero?
+                      = surround "(", ")" do
+                        #{box.ratio.to_f/1000}%
 
       .box
         .tools
