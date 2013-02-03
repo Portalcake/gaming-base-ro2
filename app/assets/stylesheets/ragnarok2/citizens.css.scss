@@ -1,8 +1,11 @@
-.model_details.citizen .merchant {
+.model_details.citizen .merchant_list {
+  overflow: auto;
+  .merchant {
     overflow: auto;
     .item_icon img {
       padding-right: 5px;
       float:left;
       width:30px;
     }
+  }
 }
