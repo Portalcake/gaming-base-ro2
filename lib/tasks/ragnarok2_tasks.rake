@@ -401,7 +401,7 @@ namespace :ragnarok2 do
       ["BreakResult.ct", "Ragnarok2::ItemBreakResult"]
     ].each do |file, class_name, opts|
 
-      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file), :debug=>true)
+      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
 
       mapper = DatabaseMapper.find(
         :header => file.header,

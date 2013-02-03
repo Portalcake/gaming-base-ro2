@@ -36,7 +36,7 @@
               .attribute Price #{@item.price_buy} (buy), #{(@item.price_buy/10.0).ceil} (sell)
             - unless @item.sockets.empty?
               .property= pluralize(@item.sockets.count, "Socket")
-            .attribute #{@item.stack_max} pieces stackable
+            .attribute #{pluralize @item.stack_max, "piece"} stackable
             .attribute Durability #{human_item_durability(@item.durability)}
             .attribute= booleanize_string("Droppable", @item.is_drop)
             .attribute= booleanize_string("Depositable", @item.is_deposit)
@@ -88,14 +88,17 @@
           - @item.quest_item_rewards.each do |reward|
             .questreward
               = link_to(reward.quest, reward.quest)
-              (#{pluralize(reward.amount, "pieces")})
+              (#{pluralize(reward.amount, "piece")})
 
       - unless @item.sellcitizens.empty?
         .box
           .title Buyable at
-          - @item.sellcitizens.default_order.each do |citizen|
-            .merchant
-              = link_to(citizen, citizen)
+          .merchant_list.twin_boxes
+            - @item.sellcitizens.default_order.each do |citizen|
+              .merchant{:class=>cycle("box_left", "box_right", :name => "merchant_list_boxes")}
+                .name= link_to citizen, citizen
+                .price= pluralize @item.price_buy, "Rupee"
+
 
       - unless @item.random_sets.empty?
         .box

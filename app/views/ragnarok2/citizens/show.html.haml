@@ -5,13 +5,23 @@
     .box_left
       .box
         .title Details
-        .attribute #{@citizen.job_name}
-        .attribute Level #{@citizen.min_level} ~ #{@citizen.max_level}
-        .attribute EXP #{@citizen.exp.empty? ? "?" : @citizen.exp.join(" ~ ")}
-        .attribute Element #{human_element(@citizen.element)}
-        .attribute Race #{human_race(@citizen.race)}
-        .attribute Base EXP multiplier #{@citizen.base_exp_multiplier}
-        .attribute Lisence EXP multiplier #{@citizen.lisence_exp_multiplier}
+        .twin_boxes
+          .box_left
+            .attribute #{@citizen.job_name}
+            .attribute Level #{@citizen.min_level} ~ #{@citizen.max_level}
+            .attribute EXP #{@citizen.exp.empty? ? "?" : @citizen.exp.join(" ~ ")}
+            .attribute Element #{human_element(@citizen.element)}
+            .attribute Race #{human_race(@citizen.race)}
+            .attribute Base EXP multiplier #{@citizen.base_exp_multiplier}
+            .attribute Lisence EXP multiplier #{@citizen.lisence_exp_multiplier}
+          .box_right
+            .attribute Attack range #{@citizen.attack_range}
+            .attribute Attack execution time #{@citizen.attack_execution_time}
+            .attribute Attack cooldown #{@citizen.attack_cooldown_time}
+            .attribute Walk speed #{@citizen.walk_speed}
+            .attribute Run speed #{@citizen.run_speed}
+            .attribute Move action time #{@citizen.min_move_action_time} ~ #{@citizen.max_move_action_time}
+            .attribute Corpse disappear time #{@citizen.corpse_disappear_time}
 
       - unless @citizen.start_quests.empty?
         .box
@@ -23,18 +33,13 @@
       - unless @citizen.sellitems.empty?
         .box
           .title Sells
-          - @citizen.sellitems.default_order.each do |item|
-            .merchant
-              = link_to item, item
+          .merchant_list.twin_boxes
+            - @citizen.sellitems.default_order.each do |item|
+              .merchant{:class=>cycle("box_left", "box_right", :name => "merchant_list_boxes")}
+                .item_icon= ragnarok2_icon_image_tag(item.icon, :alt=>"")
+                .name= link_to item, item
+                .price= pluralize item.price_buy, "Rupee"
 
-      .box
-        .tools
-          = link_to "» Add drops", new_drop_path(:citizen_id=>@citizen.id)
-        .title Drops
-        - if @citizen.drops.empty?
-          .drop Nothing
-        - else 
-          = render @citizen.drops.default_order
 
     .box_right
       - unless @citizen.resistances.empty?
@@ -45,14 +50,13 @@
               #{resistance} #{human_element_resistance(value)}
 
       .box
-        .title Miscellaneous
-        .attribute Attack range #{@citizen.attack_range}
-        .attribute Attack execution time #{@citizen.attack_execution_time}
-        .attribute Attack cooldown #{@citizen.attack_cooldown_time}
-        .attribute Walk speed #{@citizen.walk_speed}
-        .attribute Run speed #{@citizen.run_speed}
-        .attribute Move action time #{@citizen.min_move_action_time} ~ #{@citizen.max_move_action_time}
-        .attribute Corpse disappear time #{@citizen.corpse_disappear_time}
+        .tools
+          = link_to "» Add drops", new_drop_path(:citizen_id=>@citizen.id)
+        .title Drops
+        - if @citizen.drops.empty?
+          .drop Nothing
+        - else 
+          = render @citizen.drops.default_order
     
 
 = render "/share/development_box", :model => @citizen
