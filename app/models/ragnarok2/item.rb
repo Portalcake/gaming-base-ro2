@@ -27,6 +27,7 @@ module Ragnarok2
             :class_name => "Ragnarok2::ItemCategory",
             :counter_cache => true
 
+    default_scope includes(:cash_shop_info)
     belongs_to :cash_shop_info,
             :inverse_of => :item,
             :foreign_key => :item_id,
@@ -119,6 +120,7 @@ module Ragnarok2
             :through => :craft_scrolls,
             :source => :craft_info
 
+    default_scope includes(:item_socket_group)
     has_one :item_socket_group,
             :foreign_key => :socket_group_id,
             :primary_key => :socket_groupid
