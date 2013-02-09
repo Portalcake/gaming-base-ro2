@@ -4,12 +4,7 @@ module Ragnarok2
   class CitizensController < ApplicationController
 
     def index
-      if params[:q].nil? || params[:q].length.zero?
-        @citizens = Citizen.default_order.page(params[:page])
-      else
-        @citizens = Citizen.default_order.where("ragnarok2_translations_citizen_names.translation LIKE ?", "%#{params[:q]}%").page(params[:page])
-      end
-      respond_with(@citizens)
+      respond_with(@citizens = Citizen.page(params[:page]).default_order.search(params[:q]))
     end
 
     def show

@@ -3,11 +3,7 @@ require_dependency "ragnarok2/application_controller"
 module Ragnarok2
   class KharasController < ApplicationController
     def index
-      @kharas = Khara
-      unless params[:q].nil? || params[:q].length.zero?
-        @kharas = @kharas.where("ragnarok2_translations_kharas.title LIKE ?", "%#{params[:q]}%")
-      end
-      respond_with(@kharas = @kharas.main_quests.default_order.page(params[:page]))
+      respond_with(@kharas = Khara.main_quests.default_order.search(params[:q]).page(params[:page]))
     end
 
     def show

@@ -4,12 +4,7 @@ module Ragnarok2
   class QuestsController < ApplicationController
 
     def index
-      if params[:q].nil? || params[:q].length.zero?
-        @quests = Quest.default_order.page(params[:page])
-      else
-        @quests = Quest.default_order.where("ragnarok2_translations_quests.quest_title LIKE ?", "%#{params[:q]}%").page(params[:page])
-      end
-      respond_with(@quests)
+      respond_with(@quests = Quest.default_order.search(params[:q]).page(params[:page]))
     end
 
     def show

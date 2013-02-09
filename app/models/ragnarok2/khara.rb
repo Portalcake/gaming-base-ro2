@@ -1,5 +1,7 @@
 module Ragnarok2
   class Khara < ActiveRecord::Base
+    searchable 
+
     validates :quest_id,
         :allow_blank => false,
         :numericality => { :only_integer => true, :greater_than=>0 }
@@ -25,6 +27,17 @@ module Ragnarok2
 
     scope :default_order, order("ragnarok2_kharas.min_base_level ASC, ragnarok2_translations_kharas.title ASC")
     scope :main_quests, where("ragnarok2_kharas.quest_type > 0")
+
+
+    search_for :name, :as => :string do |b, q|
+        b.joins{translation.inner}.where{translation.title =~ "%#{q}%"}
+    end
+    search_for :min_level, :as => :integer do |b, q|
+        b.where{min_base_level.gteq q}
+    end
+    search_for :max_level, :as => :integer do |b, q|
+        b.where{max_base_level.lteq q}
+    end
 
     def to_s
       self.name
