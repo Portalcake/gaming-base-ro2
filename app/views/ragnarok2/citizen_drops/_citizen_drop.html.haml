@@ -1,33 +1,41 @@
 %div[citizen_drop]
   - if @citizen
     - base_model = :citizen
-    = link_to citizen_drop.item, citizen_drop.item
+    - icon = ragnarok2_icon_image_tag(citizen_drop.item.icon, :alt=>citizen_drop.item.name)
+    - link_target = citizen_drop.item
   - else
     - base_model = :item
-    = link_to citizen_drop.citizen, citizen_drop.citizen
-  = surround "(", ")" do
-    Votes:
-    #{citizen_drop.approving_users_count} up,
-    #{citizen_drop.disapproving_users_count} down
+    - link_target = citizen_drop.citizen
+    
+
+  - if icon
+    .model_icon= icon
+
 
   - if user_signed_in?
-    - if user_vote = citizen_drop.votes.where(:user_id=>current_user.id).first
-      = surround "[", "]" do
-        You
-        - if user_vote.approved?
-          approved.
-        - else
-          disapproved.
-        = link_to "retire", vote_drop_path(citizen_drop, :retire=>1, :ref=>base_model), :method=>:post
-    - elsif user_can?(:vote, citizen_drop)
-      = surround "[", "]" do
-        = succeed "," do
-          = link_to "Approve", vote_drop_path(citizen_drop, :approve=>1, :ref=>base_model), :method=>:post
-        = link_to "Disapprove", vote_drop_path(citizen_drop, :approve=>0, :ref=>base_model), :method=>:post
-    - else
-      You are not allowedto vote.
-
+    .voting-form
+      - if user_can?(:vote, citizen_drop)
+        = link_to '', vote_drop_path(citizen_drop, :approve=>1, :ref=>base_model), :method=>:post, :class=>[:icon, "icon-approve"], :title=>"Approve"
+        = link_to '', vote_drop_path(citizen_drop, :approve=>0, :ref=>base_model), :method=>:post, :class=>[:icon, "icon-disapprove"], :title=>"Disapprove"
+      - else
+        %span.disabled You are not allowed to vote.
   - else
-    %span.disabled
-      = surround "(", ")" do
-        Please log in to vote
+    %span.disabled.voting-form
+      Please log in to vote
+
+
+  .name= link_to link_target, link_target
+
+  .voting-bar
+    - sum = citizen_drop.approving_users_count+citizen_drop.disapproving_users_count
+    .vote.up{:style=>"width:#{citizen_drop.approving_users_count.to_f/sum*100}%"}
+    .vote.down{:style=>"width:#{citizen_drop.disapproving_users_count.to_f/sum*100}%"}
+
+  - if user_vote = citizen_drop.votes.where(:user_id=>current_user.id).first
+    .user-voting
+      - if user_vote.approved?
+        = image_tag("/assets/icons/colorized/bullet_green.png")
+      - else
+        = image_tag("/assets/icons/colorized/bullet_red.png")
+      .retire= link_to "retire", vote_drop_path(citizen_drop, :retire=>1, :ref=>base_model), :method=>:post
+      

@@ -135,7 +135,10 @@
         - if @item.drops.empty?
           .drop Nothing
         - else 
-          = render @item.drops.default_order 
+          .twin_boxes
+            - @item.drops.default_order.each do |drop|
+              .drop{:class=>cycle("box_left", "box_right", :name => "random_sets_boxes_includes")}
+                = render drop
 
   - unless @item.item_break_results.empty?
     .box

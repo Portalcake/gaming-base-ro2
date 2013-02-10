@@ -11,3 +11,55 @@
 #drop_search {
   padding-top:15px;
 }
+
+.ragnarok2_citizen_drop {
+  overflow: auto;
+  .model_icon img {
+    padding-right: 5px;
+    float:left;
+    width:30px;
+  }
+  .user-voting {
+    img {
+      float:left;
+    }
+    .retire {
+      float:right;
+      display: none;
+      padding-right: 8px;
+    }
+  }
+  .voting-form {
+    float:right;
+    padding-right:3px;
+    display:none;
+    .icon-approve {
+      background-image: url("/assets/icons/colorized/bullet_green.png");
+    }
+    .icon-disapprove {
+      background-image: url("/assets/icons/colorized/bullet_red.png");
+    }
+  }
+  .voting-bar {
+    float:left;
+    padding-top: 6px;
+    padding-right: 4px;
+    width:80px;
+    height:2px;
+    .vote {
+      height:2px;
+      float:left;
+      &.up {
+        background-color: #559911;
+      }
+      &.down {
+        background-color: #CC0000;
+      }
+    }
+  }
+  &:hover {
+    .voting-form, .user-voting .retire {
+      display:block;
+    }
+  }
+}

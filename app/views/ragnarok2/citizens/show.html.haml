@@ -49,14 +49,17 @@
             .resistance
               #{resistance} #{human_element_resistance(value)}
 
-      .box
+      .box.droplist
         .tools
           = link_to "» Add drops", new_drop_path(:citizen_id=>@citizen.id)
         .title Drops
         - if @citizen.drops.empty?
           .drop Nothing
-        - else 
-          = render @citizen.drops.default_order
+        - else
+          .twin_boxes
+            - @citizen.drops.default_order.each do |drop|
+              .drop{:class=>cycle("box_left", "box_right", :name => "random_sets_boxes_includes")}
+                = render drop
     
 
 = render "/share/development_box", :model => @citizen
