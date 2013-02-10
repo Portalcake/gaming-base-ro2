@@ -72,6 +72,11 @@
             - when 30
               Repair
               = pluralize(task.complete_type_value1, "items")
+            - when 31
+              - target = Ragnarok2::SkillGroup.find_by_skill_group(task.complete_type_value1)
+              Use
+              = link_to target, target
+              = pluralize(task.complete_type_value2, "time")
             - when 32
               Summon
               = pluralize(task.complete_type_value1, "Guardian")
@@ -102,13 +107,14 @@
       .reward
         - case task.action_type
           - when 5
-            #{task.action_value1} Rupee
+            = pluralize task.action_value1, "Rupee"
           - when 10
             #{task.action_value1} Exp
           - when 11
             #{task.action_value1} JobExp
           - else
-            = render "share/missing_information"
+            - unless task.action_value1.zero?
+              = render "share/missing_information"
 
 - @khara.tasks.each do |khara|
   = render "/share/development_box", :model => khara
