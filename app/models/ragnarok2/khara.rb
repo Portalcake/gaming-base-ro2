@@ -32,11 +32,11 @@ module Ragnarok2
     search_for :name, :as => :string do |b, q|
         b.joins{translation.inner}.where{translation.title =~ "%#{q}%"}
     end
-    search_for :min_level, :as => :integer do |b, q|
+    search_for :level_from, :as => :integer do |b, q|
         b.where{min_base_level.gteq q}
     end
-    search_for :max_level, :as => :integer do |b, q|
-        b.where{max_base_level.lteq q}
+    search_for :level_to, :as => :integer do |b, q|
+        b.where{min_base_level.lteq q}
     end
 
     def to_s

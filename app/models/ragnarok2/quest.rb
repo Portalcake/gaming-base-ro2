@@ -83,11 +83,9 @@ module Ragnarok2
     search_for :min_level, :as => :integer do |b, q|
         b.where{min_base_level.gteq q}
     end
-    search_for :rec_level, :as => :integer do |b, q|
-        b.where{recommand_base_level.eq q}
-    end
+
     search_for :max_level, :as => :integer do |b, q|
-        b.where{max_base_level.lteq q}
+        b.where{recommand_base_level.lteq q}
     end
 
 

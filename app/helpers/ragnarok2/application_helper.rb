@@ -4,8 +4,19 @@ module Ragnarok2::ApplicationHelper
       primary.item :news, "News", news_index_path, :highlights_on=>/ro2\/[a-z]{2}\/news/
       primary.item :forum, "Forum", forum.topics_path
       primary.item :placeholder_news, "", :class => :placeholder
-      primary.item :quests, "Quests", quests_path, :highlights_on=>/ro2\/[a-z]{2}\/quests/
-      primary.item :khara, "Khara", kharas_path, :highlights_on=>/ro2\/[a-z]{2}\/kharas/
+      
+      primary.item :quests, "Quests", quests_path, :highlights_on=>/ro2\/[a-z]{2}\/quests/ do |q|
+        (1..100).step(10) do |i|
+          q.item "quest_level_#{i}_#{i+9}", "Level #{i}-#{i+9}", quests_path(:q=>{:min_level=>i, :max_level=>i+9})
+        end
+      end
+
+      primary.item :khara, "Khara", kharas_path, :highlights_on=>/ro2\/[a-z]{2}\/kharas/ do |q|
+        (1..50).step(10) do |i|
+          q.item "khara_level_#{i}_#{i+9}", "Level #{i}-#{i+9}", kharas_path(:q=>{:level_from=>i, :level_to=>i+9})
+        end
+      end
+
       primary.item :cititzens, "NPCs", citizens_path, :highlights_on=>/ro2\/[a-z]{2}\/citizens/
       primary.item :items, "Items & Sets", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items/ do |i|
         i.item :items, "All items", items_path, :highlights_on=>/ro2\/[a-z]{2}\/items\/?$/
