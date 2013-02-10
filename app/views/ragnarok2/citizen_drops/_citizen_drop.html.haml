@@ -31,7 +31,7 @@
     .vote.up{:style=>"width:#{citizen_drop.approving_users_count.to_f/sum*100}%"}
     .vote.down{:style=>"width:#{citizen_drop.disapproving_users_count.to_f/sum*100}%"}
 
-  - if user_vote = citizen_drop.votes.where(:user_id=>current_user.id).first
+  - if user_signed_in? && user_vote = citizen_drop.votes.where(:user_id=>current_user.id).first
     .user-voting
       - if user_vote.approved?
         = image_tag("/assets/icons/colorized/bullet_green.png")
