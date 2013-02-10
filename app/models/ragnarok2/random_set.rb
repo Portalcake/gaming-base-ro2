@@ -10,5 +10,7 @@ module Ragnarok2
           :primary_key => :random_set_id,
           :foreign_key => :randomset_id,
           :class_name => "Ragnarok2::Item"
+
+    validates :hidden_item, :presence => true
   end
 end

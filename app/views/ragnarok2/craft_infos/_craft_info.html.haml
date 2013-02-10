@@ -5,6 +5,7 @@
       = link_to craft_info.item, craft_info.item
       = surround "(", ")" do 
         = pluralize craft_info.craft_item_amount, "piece"
+    .requirements Scroll #{link_to craft_info.craft_scroll_item, craft_info.craft_scroll_item}
     .requirements Craft-Level #{craft_info.craft_level}
     - unless craft_info.craft_needsp.zero?
       .requirements SP #{craft_info.craft_needsp}
@@ -16,7 +17,6 @@
       .requirements Cooltime #{pluralize craft_info.cooltime_min, "minute"}
     - unless craft_info.learn_needmoney.zero?
       .requirements Money to learn #{pluralize craft_info.learn_needmoney, "Rupee"}
-    .requirements Scroll #{link_to craft_info.craft_scroll_item, craft_info.craft_scroll_item}
 
   .box_right
     .materials
