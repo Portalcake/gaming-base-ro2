@@ -1,6 +1,7 @@
 module Ragnarok2
   class Citizen < ActiveRecord::Base
-
+    searchable
+    
     validates :citizen_id,
         :uniqueness => { :case_sensitive => false },
         :allow_blank => false,
@@ -29,8 +30,6 @@ module Ragnarok2
             :source => :quest,
             :conditions => ["ragnarok2_quest_citizens.is_start = ?", true]
 
-    after_save :update_function_information
-
     has_many :citizen_items, :dependent => :destroy
     has_many :sellitems,
             :through => :citizen_items,
@@ -43,15 +42,28 @@ module Ragnarok2
             :through => :citizen_drops,
             :class_name => "Ragnarok2::Item",
             :source => :item
+            
+
+    after_save :update_function_information
 
     alias_method :drops, :citizen_drops
 
 
     scope :default_order, order("ragnarok2_citizens.min_level ASC, ragnarok2_translations_citizen_names.translation ASC")
 
-    scope :search_by_name, lambda {|name|
-        where("ragnarok2_translations_citizen_names.translation LIKE ?", "%#{name}%")
+    scope :search_by_name, lambda {|q|
+        joins{name.inner}.where{name.translation =~ "%#{q}%"}
     }
+
+    search_for :name, :as => :string do |b, q|
+        b.joins{name.inner}.where{name.translation =~ "%#{q}%"}
+    end
+    search_for :min_level, :as => :integer do |b, q|
+        b.where{min_level.gteq q}
+    end
+    search_for :max_level, :as => :integer do |b, q|
+        b.where{max_level.lteq q}
+    end
 
     def items
         self.dropitems+self.sellitems
@@ -92,8 +104,8 @@ module Ragnarok2
     end
 
 
-    def update_function_information
-        return unless function_information_changed?
+    def update_function_information(force=false)
+        return unless force || function_information_changed?
 
         #delete all function information
         self.citizen_items.destroy_all

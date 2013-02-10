@@ -1,0 +1,23 @@
+en:
+  searchable:
+    attributes:
+      ragnarok2/citizen:
+        min_level: Min. level
+        max_level: Max. level
+        name: Name
+      ragnarok2/quest:
+        name: Name
+        min_level: Min. level
+        max_level: Max. rec. level
+      ragnarok2/khara:
+        name: Name
+        level_from: Min. level starts at
+        level_to: Min. level stops at
+      ragnarok2/item:
+        name: Name
+        min_level: Min. level
+        max_level: Max. level
+
+  activerecord:
+    models:
+    attributes:

@@ -1,4 +1,4 @@
-= render "share/quicksearch"
+= render "share/searchable", :q => Ragnarok2::Citizen
 
 = render @citizens
 = render "share/pagination", :entries => @citizens

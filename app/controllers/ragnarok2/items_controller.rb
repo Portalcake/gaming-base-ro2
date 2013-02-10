@@ -4,12 +4,7 @@ module Ragnarok2
   class ItemsController < ApplicationController
 
     def index
-      if params[:q].nil? || params[:q].length.zero?
-        @items = Item.default_order.page(params[:page])
-      else
-        @items = Item.default_order.where("ragnarok2_translations_item_names.translation LIKE ?", "%#{params[:q]}%").page(params[:page])
-      end
-      respond_with(@items)
+      respond_with(@items = Item.default_order.search(params[:q]).page(params[:page]))
     end
 
     def show

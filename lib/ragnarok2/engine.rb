@@ -8,5 +8,10 @@ module Ragnarok2
         Rails.application.config.assets.precompile += %w( ragnarok2/* )
       end
     end
+
+    #load locales in subdirectories
+    paths["config/locales"] << "config/locales/helpers"
+    paths["config/locales"] << "config/locales/activerecords"
+
   end
 end

@@ -1,5 +1,7 @@
 module Ragnarok2
   class Item < ActiveRecord::Base
+    searchable
+
     validates :item_id,
         :uniqueness => { :case_sensitive => false },
         :allow_blank => false,
@@ -25,6 +27,7 @@ module Ragnarok2
             :class_name => "Ragnarok2::ItemCategory",
             :counter_cache => true
 
+    default_scope includes(:cash_shop_info)
     belongs_to :cash_shop_info,
             :inverse_of => :item,
             :foreign_key => :item_id,
@@ -117,6 +120,7 @@ module Ragnarok2
             :through => :craft_scrolls,
             :source => :craft_info
 
+    default_scope includes(:item_socket_group)
     has_one :item_socket_group,
             :foreign_key => :socket_group_id,
             :primary_key => :socket_groupid
@@ -130,6 +134,21 @@ module Ragnarok2
     scope :search_by_name, lambda {|name|
         where("ragnarok2_translations_item_names.translation LIKE ?", "%#{name}%")
     }
+
+    search_for :name, :as => :string do |b, q|
+        b.joins{name.inner}.where{name.translation =~ "%#{q}%"}
+    end
+    search_for :min_level, :as => :integer do |b, q|
+        b.where{require_level.gteq q}
+    end
+    search_for :max_level, :as => :integer do |b, q|
+        b.where{require_level.lteq q}
+    end
+    search_for :job, :as => :collection, :collection => Proc.new {
+        Ragnarok2::Job.all.collect{|j| [j.to_s, j.id]}
+        }, :collection_options => {:include_blank => 'All'} do |b, q|
+        b.joins{jobs}.group{id}.where{{jobs=>{id=>q}}}
+    end 
 
     def citizens
         self.sellcitizens+self.dropcitizens

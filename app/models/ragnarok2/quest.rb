@@ -1,5 +1,7 @@
 module Ragnarok2
   class Quest < ActiveRecord::Base
+    searchable
+
     @@rewards_columns = [
         [:reward_item_id1, :reward_item_count1],
         [:reward_item_id2, :reward_item_count2],
@@ -74,6 +76,18 @@ module Ragnarok2
     has_many :items, :through => :quest_item_rewards
     has_many :dungeons,
             :primary_key => :quest_id
+
+    search_for :name, :as => :string do |b, q|
+        b.joins{translation.inner}.where{translation.quest_title =~ "%#{q}%"}
+    end
+    search_for :min_level, :as => :integer do |b, q|
+        b.where{min_base_level.gteq q}
+    end
+
+    search_for :max_level, :as => :integer do |b, q|
+        b.where{recommand_base_level.lteq q}
+    end
+
 
     def quest_title
       self.translation.quest_title
