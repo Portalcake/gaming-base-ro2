@@ -23,6 +23,15 @@
             .attribute Move action time #{@citizen.min_move_action_time} ~ #{@citizen.max_move_action_time}
             .attribute Corpse disappear time #{@citizen.corpse_disappear_time}
 
+      - unless @citizen.spawn_points.empty?
+        .box
+          .title Where to find?
+          - @citizen.spawn_points.joins{:map}.each do |sp|
+            .spawnpoint
+              = link_to sp.map, sp.map
+              = surround "(", ")" do
+                X: #{sp.pos_x}, Y: #{sp.pos_y}
+
       - unless @citizen.start_quests.empty?
         .box
           .title Quests

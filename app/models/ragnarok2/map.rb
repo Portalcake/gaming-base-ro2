@@ -15,6 +15,15 @@ module Ragnarok2
     has_many :map_images,
       :primary_key => :map_id
 
+    has_many :spawn_points,
+      :primary_key => :map_id,
+      :foreign_key => :map_id,
+      :dependent => :destroy
+
+    has_many :citizens, :through => :spawn_points
+
+
+
     scope :default_order, order("ragnarok2_maps.name ASC")
     def to_s
       self.name

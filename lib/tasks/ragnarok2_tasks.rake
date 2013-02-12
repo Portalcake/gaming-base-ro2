@@ -296,18 +296,41 @@ namespace :ragnarok2 do
 
     m = DatabaseMapper.new("Ragnarok2::ItemSocketGroup", :partial=>true, :find_by=>:socket_group_id)
     m.map_column("SocketGroupID", "socket_group_id")
+
+    m = DatabaseMapper.new("Ragnarok2::SpawnPoint", :partial=>false)
+    m.map_column("Version", nil)
+    m.map_column("Index", nil)
+    m.map_column("PosX", "pos_x")
+    m.map_column("PosY", "pos_y")
+    m.map_column("PosZ", "pos_z")
+    m.map_column("Rot", nil)
+    m.map_column("AssetIndex", "citizen_id")
+    m.map_column("HoverRadius", nil)
+    m.map_column("Triggered", nil)
+    m.map_column("SpawnRadius", nil)
+    m.map_column("Total PathPoints", nil)
+    m.map_column("PP Index", nil)
+    m.map_column("PP PosX", nil)
+    m.map_column("PP PosY", nil)
+    m.map_column("PP PosZ", nil)
+    m.map_column("PP ActionIndex", nil)
+    m.map_column("PP SpeechIndex", nil)
+    m.map_column("PP Hour", nil)
+    m.map_column("PP Minute", nil)
+    m.map_column("PP Second", nil)
+    m.map_column("map_id", "map_id")
   end
 
 
   ############
 
   desc "Performs a full update (without extraction of game files)"
-  task :update => [:dds, :tbl, :ct] do
+  task :update => [:dds, :tbl, :ct, :spawnpoints] do
     puts "Update successfully run."
   end
 
   desc "Performs a full update"
-  task :update_with_extract => [:vdk, :dds, :tbl, :ct] do
+  task :update_with_extract => [:vdk, :update] do
     puts "Update successfully run."
   end
 
@@ -318,6 +341,33 @@ namespace :ragnarok2 do
       vdk = VDKUnpacker.new(src, dest)
       vdk.unpack!
     end
+  end
+
+  desc "Reading Spawn Points"
+  task :spawnpoints => [:load_mappers, :environment] do
+
+    #clear old spawnpoints
+    Ragnarok2::SpawnPoint.delete_all
+
+    Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ZONE*', 'BACKGROUND', 'ZONE', '*', "spawn.tbl")) do |filename|
+      next unless filename.match(/(?<map_id>\d+)\/spawn\.tbl$/i)
+
+      puts "> Loading #{filename}..."
+      file = FileExtractor_tbl.new(filename)
+
+      #adding map_id to each data-row
+      file.header << "map_id"
+      file.data.collect!{|d| d << $~[:map_id]}
+
+      mapper = DatabaseMapper.find(
+        :header => file.header,
+        :class_name => "Ragnarok2::SpawnPoint"
+      )
+      mapper.load(file.data, :mass_import=>true)
+    end
+
+    raise "OMFG! No more spawnpoints?!" unless Ragnarok2::SpawnPoint.count > 0
+
   end
 
   desc "Reading *.tbl files"
@@ -532,7 +582,7 @@ class DatabaseMapper
     @before_load.call if @before_load
 
     #use a more efficient way to import if we purged the table first
-    if settings[:delete_all] && !@loader
+    if settings[:delete_all] && !@loader || settings[:mass_import]
       import_list = []
       hashed_datasets.each do |entry|
         n = @model_instance.new

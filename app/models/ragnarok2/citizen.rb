@@ -42,6 +42,12 @@ module Ragnarok2
             :through => :citizen_drops,
             :class_name => "Ragnarok2::Item",
             :source => :item
+
+    has_many :spawn_points,
+        :primary_key => :citizen_id,
+        :dependent => :destroy
+
+    has_many :maps, :through => :spawn_points
             
 
     after_save :update_function_information
