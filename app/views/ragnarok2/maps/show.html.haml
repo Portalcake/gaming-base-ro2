@@ -24,12 +24,9 @@
       = (render @map.dungeons.default_order) || "None"
 
   - unless @map.spawn_points.empty?
-    .box
+    .box.twin_boxes
       .title NPCs
-      - @map.citizens.each do |citizen|
-        .spawnpoint
+      - @map.citizens.uniq.each do |citizen|
+        .spawnpoint{:class=>cycle("box_left", "box_right", :name => "spawn_list_boxes")}
           = link_to citizen, citizen
-          = surround "(", ")" do
-            - citizen.spawn_points.find_all_by_map_id(@map.map_id).each do |sp|
-              X: #{sp.pos_x}, Y: #{sp.pos_y}
 = render "/share/development_box", :model => @map

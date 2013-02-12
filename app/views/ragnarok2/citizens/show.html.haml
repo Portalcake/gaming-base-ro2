@@ -24,10 +24,10 @@
             .attribute Corpse disappear time #{@citizen.corpse_disappear_time}
 
       - unless @citizen.spawn_points.empty?
-        .box
+        .box.twin_boxes
           .title Where to find?
           - @citizen.spawn_points.joins{:map}.each do |sp|
-            .spawnpoint
+            .spawnpoint{:class=>cycle("box_left", "box_right", :name => "spawn_list_boxes")}
               = link_to sp.map, sp.map
               = surround "(", ")" do
                 X: #{sp.pos_x}, Y: #{sp.pos_y}
