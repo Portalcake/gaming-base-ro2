@@ -414,7 +414,7 @@ namespace :ragnarok2 do
 
   desc "Search through ct files to find a value"
   task :search_ct => [:environment] do
-    search_value = "33000541"
+    search_value = "10160000"
     Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', "*.ct")).sort.each do |file|
 
       ext = FileExtractor_ct.new(file)
@@ -445,12 +445,20 @@ namespace :ragnarok2 do
 
 
   desc "Reads and converts *.dds maps to png"
-  task :dds_maps do
+  task :dds_maps => [:environment] do
     puts "Converting *.dds map files..."
 
     dds_files = Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'UI', 'LANG', '65', 'map', "*.dds"))
     dds_files.each_with_index do |dds, index|
-      dds_to_png(dds, RAGNAROK2_ASSETS_DIR[:maps])
+      outfileloc = dds_to_png(dds, RAGNAROK2_ASSETS_DIR[:maps])
+
+      if outfileloc.match(/\/WorldMap_(?<map_id>\d+)(?:_(?<map_part>\d+))?\.png$/i)
+        mapimg = Ragnarok2::MapImage.where(:map_id=>$~[:map_id], :map_part=>$~[:map_part]).first_or_initialize
+        mapimg.image = File.open(outfileloc)
+        mapimg.save
+      end
+
+
       print "> Done #{index+1}/#{dds_files.count}\r"
     end
     puts
@@ -469,7 +477,7 @@ def dds_to_png(src, dest)
     icon = MiniMagick::Image.open(src)
     icon.format "png"
     icon.write("#{dest}/#{name.downcase}.png")
-    true
+    "#{dest}/#{name.downcase}.png"
   rescue
     puts "Ignored #{src}: #{$!}"
     false

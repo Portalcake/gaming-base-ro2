@@ -97,7 +97,6 @@
             - @item.sellcitizens.default_order.each do |citizen|
               .merchant{:class=>cycle("box_left", "box_right", :name => "merchant_list_boxes")}
                 .name= link_to citizen, citizen
-                .price= pluralize @item.price_buy, "Rupee"
 
 
       - unless @item.random_sets.empty?

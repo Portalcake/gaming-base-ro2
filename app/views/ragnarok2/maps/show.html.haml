@@ -2,7 +2,10 @@
   %h2= @map
 
   .box.details
-    .minimap= ragnarok2_minimap_image_tag(@map)
+    .minimaps
+      - @map.map_images.each do |mimg|
+        .minimap= link_to image_tag(mimg.image(:thumb)), mimg.image.url
+
     .title Details
     .attributes
       .attributes= booleanize_string("PK", !@map.is_pk.zero?)

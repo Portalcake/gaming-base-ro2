@@ -1,9 +1,11 @@
 .model_details.map {
-  .minimap {
+  .minimaps {
     float:right;
-    img {
-      max-width: 200px;
-      max-height: 200px;
+    overflow: auto;
+    .minimap {
+      float:right;
+      clear:right;
+      padding: 3px;
     }
   }
   .box.details {
