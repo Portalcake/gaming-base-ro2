@@ -125,6 +125,13 @@ module Ragnarok2
             :foreign_key => :socket_group_id,
             :primary_key => :socket_groupid
 
+    has_many :upgrade_infos,
+            :through => :item_upgrade_info,
+            :conditions => proc { "normalenforcefailed = 1" }
+
+    has_one :item_upgrade_info,
+            :primary_key => :item_id
+
     alias_method :drops, :citizen_drops
 
     before_save :update_icon_name, :update_required_joblist

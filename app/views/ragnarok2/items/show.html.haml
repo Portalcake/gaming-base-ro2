@@ -60,6 +60,24 @@
       - if @item.skill
         = render @item.skill
 
+      - unless @item.upgrade_infos.empty?
+        .box
+          .title Refining
+          - @item.upgrade_infos.each do |upgrade|
+            .upgrade_info              
+              Level #{upgrade.upgrade_level+1}:
+              +#{upgrade.normalabilityuppercent.to_f/100}% Atk/Def
+              
+              =# upgrade.need_special_material_amount
+              =# link_to upgrade.special_material.to_s.pluralize(upgrade.need_special_material_amount), upgrade.special_material
+              = surround "(", ")" do
+                = upgrade.need_normal_material_amount
+                = succeed "," do
+                  = link_to upgrade.normal_material.to_s.pluralize(upgrade.need_normal_material_amount), upgrade.normal_material
+                = succeed "," do
+                  = pluralize upgrade.need_zenny, "Rupee"
+                #{upgrade.normalenforcerate.to_f/100}% success
+
       - @item.craft_infos.each do |craft_info|
         .box
           .title Can be crafted by

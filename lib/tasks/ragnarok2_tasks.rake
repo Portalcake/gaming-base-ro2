@@ -319,6 +319,21 @@ namespace :ragnarok2 do
     m.map_column("PP Minute", nil)
     m.map_column("PP Second", nil)
     m.map_column("map_id", "map_id")
+
+    m = DatabaseMapper.new("Ragnarok2::ItemUpgradeInfo", :partial=>true, :delete_all=>true)
+    m.map_column("ItemNameID", nil)
+    m.map_column("EnforceResultID", "upgrade_info_id")
+
+    m = DatabaseMapper.new("Ragnarok2::UpgradeInfo", :partial=>true, :delete_all=>true)
+    m.map_column("EnforceGradeNum", "upgrade_level")
+    m.map_column("NeedZenny", "need_zenny")
+    m.map_column("NormalMeterialID", "need_normal_material_id")
+    m.map_column("NormalMeterialNameID", nil)
+    m.map_column("NeedNormalMeterialNum", "need_normal_material_amount")
+    m.map_column("SpecialMeterialID", "need_special_material_id")
+    m.map_column("SpecialMeterialNameID", nil)
+    m.map_column("NeedSpecialMeterialNum", "need_special_material_amount")
+
   end
 
 
@@ -421,6 +436,9 @@ namespace :ragnarok2 do
       #-["Craft_NPC.ct", ""],
       #-["Craft_ProJobType.ct", ""],
       #
+      #
+      ["ItemEnforceInfo.ct", "Ragnarok2::ItemUpgradeInfo"],
+      ["EnforceResult.ct", "Ragnarok2::UpgradeInfo"],
       ["ItemSocketGroup.ct", "Ragnarok2::ItemSocketGroup"],
       ["CraftScroll.ct", "Ragnarok2::CraftScroll"],
       ["DungeonMission.ct", "Ragnarok2::DungeonQuest"],
@@ -464,7 +482,7 @@ namespace :ragnarok2 do
 
   desc "Search through ct files to find a value"
   task :search_ct => [:environment] do
-    search_value = "10160000"
+    search_value = "11400004"
     Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', "*.ct")).sort.each do |file|
 
       ext = FileExtractor_ct.new(file)

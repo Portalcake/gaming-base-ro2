@@ -1,7 +1,7 @@
 .item_break_result[item_break_result]
   .grade Grade #{item_break_result.grade.to_s.rjust(2, "0")}:
   .helper
-    Helper-Item:
+    Catalyst:
     = item_break_result.needed_item_amount
     = link_to item_break_result.helper_item.to_s.pluralize(item_break_result.needed_item_amount),item_break_result.helper_item
   .results
