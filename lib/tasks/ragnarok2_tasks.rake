@@ -437,31 +437,31 @@ namespace :ragnarok2 do
       #-["Craft_ProJobType.ct", ""],
       #
       #
-      #["ItemEnforceInfo.ct", "Ragnarok2::ItemUpgradeInfo"],
-      #["EnforceResult.ct", "Ragnarok2::UpgradeInfo"],
-      #["ItemSocketGroup.ct", "Ragnarok2::ItemSocketGroup"],
-      #["CraftScroll.ct", "Ragnarok2::CraftScroll"],
-      #["DungeonMission.ct", "Ragnarok2::DungeonQuest"],
-      #["RandomSet.ct", "Ragnarok2::RandomSet"],
-      #["Craft_ItemList.ct", "Ragnarok2::CraftInfo"], #before craft_material
-      #["Craft_Material.ct", "Ragnarok2::CraftMaterial"],
-      #["ItemCashInfo.ct", "Ragnarok2::ItemCashInfo"],
-      #["KHARA_Title_Info.ct", "Ragnarok2::KharaTitle"],
-      #["Khara_Info.ct", "Ragnarok2::Khara"],
-      #["JobInfo.ct", "Ragnarok2::Job"],
-      #["Skill_Table_SkillLevel.ct", "Ragnarok2::Skill"],
-      #["Skill_Table_Base.ct", "Ragnarok2::SkillGroup"],
-      #["SetTrait.ct", "Ragnarok2::SetTrait"], #before itemset
-      #["TraitInfo.ct", "Ragnarok2::Trait", :delete_all=>true], #before items, before trait-part1
-      #["TraitInfo2.ct", "Ragnarok2::Trait"], #before items
-      #["BaseExpTable.ct", "Ragnarok2::BaseExp"],
-      #["ProJob_Type.ct", "Ragnarok2::ProJob"],
-      #["Map_List.ct", "Ragnarok2::Map"], #before dungeon
-      #["Merchant.ct", "Ragnarok2::MerchantInfo"], #before citizen
-      #["itemcategory.ct", "Ragnarok2::ItemCategory"], #before item
-      #["ItemInfo.ct", "Ragnarok2::Item"], #before quests, citizen, itemset, itembreakinfo, breakresult
-      #["NPCInfo.ct", "Ragnarok2::Citizen"], #before quests
-      #["Quest_Help_Info.ct", "Ragnarok2::QuestInfo"],
+      ["ItemEnforceInfo.ct", "Ragnarok2::ItemUpgradeInfo"],
+      ["EnforceResult.ct", "Ragnarok2::UpgradeInfo"],
+      ["ItemSocketGroup.ct", "Ragnarok2::ItemSocketGroup"],
+      ["CraftScroll.ct", "Ragnarok2::CraftScroll"],
+      ["DungeonMission.ct", "Ragnarok2::DungeonQuest"],
+      ["RandomSet.ct", "Ragnarok2::RandomSet"],
+      ["Craft_ItemList.ct", "Ragnarok2::CraftInfo"], #before craft_material
+      ["Craft_Material.ct", "Ragnarok2::CraftMaterial"],
+      ["ItemCashInfo.ct", "Ragnarok2::ItemCashInfo"],
+      ["KHARA_Title_Info.ct", "Ragnarok2::KharaTitle"],
+      ["Khara_Info.ct", "Ragnarok2::Khara"],
+      ["JobInfo.ct", "Ragnarok2::Job"],
+      ["Skill_Table_SkillLevel.ct", "Ragnarok2::Skill"],
+      ["Skill_Table_Base.ct", "Ragnarok2::SkillGroup"],
+      ["SetTrait.ct", "Ragnarok2::SetTrait"], #before itemset
+      ["TraitInfo.ct", "Ragnarok2::Trait", :delete_all=>true], #before items, before trait-part1
+      ["TraitInfo2.ct", "Ragnarok2::Trait"], #before items
+      ["BaseExpTable.ct", "Ragnarok2::BaseExp"],
+      ["ProJob_Type.ct", "Ragnarok2::ProJob"],
+      ["Map_List.ct", "Ragnarok2::Map"], #before dungeon
+      ["Merchant.ct", "Ragnarok2::MerchantInfo"], #before citizen
+      ["itemcategory.ct", "Ragnarok2::ItemCategory"], #before item
+      ["ItemInfo.ct", "Ragnarok2::Item"], #before quests, citizen, itemset, itembreakinfo, breakresult
+      ["NPCInfo.ct", "Ragnarok2::Citizen"], #before quests
+      ["Quest_Help_Info.ct", "Ragnarok2::QuestInfo"],
       ["Quest_Info.ct", "Ragnarok2::Quest"],
       ["SetItem.ct", "Ragnarok2::ItemSet"],
       ["DungeonInfo.ct", "Ragnarok2::Dungeon"],
@@ -469,7 +469,8 @@ namespace :ragnarok2 do
       ["BreakResult.ct", "Ragnarok2::ItemBreakResult"]
     ].each do |file, class_name, opts|
 
-      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file), :debug=>true)
+      file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
+
       mapper = DatabaseMapper.find(
         :header => file.header,
         :class_name => class_name
