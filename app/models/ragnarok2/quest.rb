@@ -7,7 +7,9 @@ module Ragnarok2
         [:reward_item_id2, :reward_item_count2],
         [:reward_item_id3, :reward_item_count3],
         [:reward_item_id4, :reward_item_count4],
-        [:reward_item_id5, :reward_item_count5]
+        [:reward_item_id5, :reward_item_count5],
+        [:reward_item_id6, :reward_item_count6],
+        [:reward_item_id7, :reward_item_count7]
     ]
 
     validates :quest_id,
