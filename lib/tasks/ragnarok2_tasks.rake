@@ -5,6 +5,10 @@ namespace :ragnarok2 do
     :maps => Rails.root.join('public', 'games', 'ro2', 'maps')
   }
 
+  # 1 warpportal
+  #65 playpark
+  RAGNAROK2_CLIENT_LANGUAGE_DIR = "1"
+
   desc "Loads Mappers"
   task :load_mappers => :environment do
 
@@ -408,7 +412,7 @@ namespace :ragnarok2 do
       ["string_npc_description.tbl", "Ragnarok2::Translations::CitizenDescription"]
     ].each do |file, class_name|
 
-      file = FileExtractor_tbl.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'LANG', '65', 'STRING', file))
+      file = FileExtractor_tbl.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'LANG', RAGNAROK2_CLIENT_LANGUAGE_DIR, 'STRING', file))
 
       mapper = DatabaseMapper.find(
         :header => file.header,
@@ -516,7 +520,7 @@ namespace :ragnarok2 do
   task :dds_maps => [:environment] do
     puts "Converting *.dds map files..."
 
-    dds_files = Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'UI', 'LANG', '65', 'map', "*.dds"))
+    dds_files = Dir.glob(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'UI', 'LANG', RAGNAROK2_CLIENT_LANGUAGE_DIR, 'map', "*.dds"))
     dds_files.each_with_index do |dds, index|
       outfileloc = dds_to_png(dds, RAGNAROK2_ASSETS_DIR[:maps])
 
