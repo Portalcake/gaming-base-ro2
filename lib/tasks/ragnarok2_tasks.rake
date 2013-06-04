@@ -89,7 +89,7 @@ namespace :ragnarok2 do
 
     m = DatabaseMapper.new("Ragnarok2::Translations::Khara", :partial=>true, :find_by=>:quest_id)
     m.map_column("Quest_Title", "title")
-    m.map_column("SUMMARY_TEXT", "summary")
+    #m.map_column("SUMMARY_TEXT", "summary")
 
     m = DatabaseMapper.new("Ragnarok2::Quest", :partial=>true, :find_by=>:quest_id)
     m.map_column("Errpr_MSG_ID", "Error_MSG_ID") #corrent spelling
