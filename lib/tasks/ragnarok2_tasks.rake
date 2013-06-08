@@ -426,7 +426,7 @@ namespace :ragnarok2 do
   desc "Reading *.ct files"
   task :ct => [:load_mappers, :environment] do
 
-    [
+    CT_FILES = [
       #["TokenName.ct", ""], #depricated?
       #["TokenFile.ct", ""], #depricated?
       #
@@ -471,7 +471,9 @@ namespace :ragnarok2 do
       ["DungeonInfo.ct", "Ragnarok2::Dungeon"],
       ["ItemBreakInfo.ct", "Ragnarok2::ItemBreakInfo"],
       ["BreakResult.ct", "Ragnarok2::ItemBreakResult"]
-    ].each do |file, class_name, opts|
+    ]
+
+    CT_FILES.each do |file, class_name, opts|
 
       file = FileExtractor_ct.new(Rails.root.join('share', 'gameclients', 'ro2', 'extracted', 'ASSET', 'ASSET', file))
 
@@ -482,6 +484,25 @@ namespace :ragnarok2 do
 
       mapper.load(file.data, opts)
     end
+
+    #delete all invalid entries
+    CT_FILES.each do |file, class_name, opts|
+      i = 0
+      puts "Cleaning up #{class_name}..."
+      begin 
+        count_all = class_name.constantize.all.count
+      rescue
+        next
+      end
+      class_name.constantize.all.each_with_index do |m, ientry|
+        print "> Done #{ientry+1}/#{count_all} (#{i} deleted)\r"
+        next if m.valid?
+        m.destroy
+        i += 1
+      end
+      puts "> Deleted #{i}/#{count_all} invalid entries"
+    end
+
   end
 
   desc "Search through ct files to find a value"
