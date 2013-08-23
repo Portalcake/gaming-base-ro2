@@ -334,10 +334,6 @@ namespace :ragnarok2 do
     m.map_column("NormalMeterialID", "need_normal_material_id")
     m.map_column("NormalMeterialNameID", nil)
     m.map_column("NeedNormalMeterialNum", "need_normal_material_amount")
-    m.map_column("SpecialMeterialID", "need_special_material_id")
-    m.map_column("SpecialMeterialNameID", nil)
-    m.map_column("NeedSpecialMeterialNum", "need_special_material_amount")
-
   end
 
 

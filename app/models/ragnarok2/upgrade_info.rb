@@ -17,11 +17,6 @@ module Ragnarok2
         :foreign_key => :need_normal_material_id,
         :class_name => "Ragnarok2::Item"
 
-    belongs_to :special_material,
-        :primary_key => :item_id,
-        :foreign_key => :need_special_material_id,
-        :class_name => "Ragnarok2::Item"
-
     scope :default_scope, order("upgrade_level ASC")
   end
 end
